@@ -1,0 +1,32 @@
+market_indicators:
+  store:
+    total_stores: "점포_수"
+    similar_industry_stores: "유사_업종_점포_수"
+    franchise_stores: "프랜차이즈_점포_수"
+    open_rate: "개업_율"
+    open_stores: "개업_점포_수"
+    close_rate: "폐업_률"
+    close_stores: "폐업_점포_수"
+  sales:
+    monthly_sales_amt: "당월_매출_금액"
+    monthly_sales_cnt: "당월_매출_건수"
+    weekday_sales_amt: "주중_매출_금액"
+    weekend_sales_amt: "주말_매출_금액"
+    time_slots:
+      - "시간대_00~06_매출_금액"
+      - "시간대_06~11_매출_금액"
+      - "시간대_11~14_매출_금액"
+      - "시간대_14~17_매출_금액"
+      - "시간대_17~21_매출_금액"
+      - "시간대_21~24_매출_금액"
+    age_groups:
+      - "연령대_10_매출_금액"
+      - "연령대_20_매출_금액"
+      - "연령대_30_매출_금액"
+      - "연령대_40_매출_금액"
+      - "연령대_50_매출_금액"
+      - "연령대_60_이상_매출_금액"
+  derived:
+    sales_per_store: "당월_매출_금액 / 유사_업종_점포_수"
+    franchise_share: "프랜차이즈_점포_수 / 유사_업종_점포_수"
+    net_store_change: "개업_점포_수 - 폐업_점포_수"

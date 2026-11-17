@@ -1,0 +1,34 @@
+project:
+  name: "Coffee-Opportunity-Research"
+  title: "Coffee Brand Opportunity Map"
+  language: "ko"
+  seed: 42
+
+seoul_market:
+  region: "서울특별시 (25개 자치구)"
+  expected_district_count: 25
+  industry_code: "CS100010"
+  industry_name: "커피-음료"
+  base_quarter: "20261"
+  comparison_quarters:
+    - "20242"
+    - "20243"
+    - "20244"
+    - "20251"
+    - "20252"
+    - "20253"
+    - "20254"
+    - "20261"
+  include_latest_if_available: true
+
+cqi:
+  species:
+    - "Arabica"
+    - "Robusta"
+  min_valid_cup_points: 10.0
+
+join_levels:
+  - "Direct Join"
+  - "Context Join"
+  - "Comparative Analysis"
+  - "Reference Analysis"

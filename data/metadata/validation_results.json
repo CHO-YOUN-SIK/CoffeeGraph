@@ -1,0 +1,161 @@
+{
+  "validated_at_utc": "2026-11-17T11:28:49.482784+00:00",
+  "overall_status": "VALIDATED",
+  "datasets": {
+    "seoul_store_district": {
+      "status": "VALIDATED",
+      "total_rows": 54765,
+      "total_cols": 12,
+      "cs100010_rows": 550,
+      "cs100010_spatial_units": 25,
+      "quarters_available": [
+        "20211",
+        "20212",
+        "20213",
+        "20214",
+        "20221",
+        "20222",
+        "20223",
+        "20224",
+        "20231",
+        "20232",
+        "20233",
+        "20234",
+        "20241",
+        "20242",
+        "20243",
+        "20244",
+        "20251",
+        "20252",
+        "20253",
+        "20254",
+        "20261",
+        "20262"
+      ],
+      "duplicate_key_rows": 0,
+      "max_store_sum_diff": 0.0,
+      "boundary_changed_across_target_quarters": false,
+      "target_quarter_unit_counts": {
+        "20242": 25,
+        "20243": 25,
+        "20244": 25,
+        "20251": 25,
+        "20252": 25,
+        "20253": 25,
+        "20254": 25,
+        "20261": 25
+      },
+      "max_missing_rate": 0.0,
+      "errors": [],
+      "warnings": []
+    },
+    "seoul_sales_district": {
+      "status": "VALIDATED",
+      "total_rows": 33803,
+      "total_cols": 53,
+      "cs100010_rows": 550,
+      "cs100010_spatial_units": 25,
+      "quarters_available": [
+        "20211",
+        "20212",
+        "20213",
+        "20214",
+        "20221",
+        "20222",
+        "20223",
+        "20224",
+        "20231",
+        "20232",
+        "20233",
+        "20234",
+        "20241",
+        "20242",
+        "20243",
+        "20244",
+        "20251",
+        "20252",
+        "20253",
+        "20254",
+        "20261",
+        "20262"
+      ],
+      "duplicate_key_rows": 0,
+      "max_weekday_weekend_rel_diff": 0.0,
+      "max_7day_rel_diff": 0.0,
+      "max_6timeslot_rel_diff": 0.0,
+      "max_missing_rate": 0.0,
+      "errors": [],
+      "warnings": []
+    },
+    "seoul_store_commercial": {
+      "status": "VALIDATED",
+      "total_rows": 456659,
+      "total_cols": 14,
+      "cs100010_rows": 9119,
+      "cs100010_spatial_units": 1535,
+      "quarters_available": [
+        "20251",
+        "20252",
+        "20253",
+        "20254",
+        "20261",
+        "20262"
+      ],
+      "duplicate_key_rows": 0,
+      "max_store_sum_diff": 0.0,
+      "boundary_changed_across_target_quarters": true,
+      "target_quarter_unit_counts": {
+        "20251": 1525,
+        "20252": 1523,
+        "20253": 1518,
+        "20254": 1518,
+        "20261": 1519
+      },
+      "max_missing_rate": 0.0,
+      "errors": [],
+      "warnings": [
+        "Spatial unit set varies across quarters: {'20251': 1525, '20252': 1523, '20253': 1518, '20254': 1518, '20261': 1519}"
+      ]
+    },
+    "seoul_sales_commercial": {
+      "status": "VALIDATED",
+      "total_rows": 128053,
+      "total_cols": 55,
+      "cs100010_rows": 6424,
+      "cs100010_spatial_units": 1107,
+      "quarters_available": [
+        "20251",
+        "20252",
+        "20253",
+        "20254",
+        "20261",
+        "20262"
+      ],
+      "duplicate_key_rows": 0,
+      "max_weekday_weekend_rel_diff": 0.0,
+      "max_7day_rel_diff": 0.0,
+      "max_6timeslot_rel_diff": 0.0,
+      "max_missing_rate": 0.0,
+      "errors": [],
+      "warnings": []
+    },
+    "cqi_arabica": {
+      "status": "VALIDATED",
+      "expected_species": "Arabica",
+      "total_rows": 1311,
+      "total_cols": 44,
+      "zero_cup_points_rows": 1,
+      "errors": [],
+      "warnings": []
+    },
+    "cqi_robusta": {
+      "status": "VALIDATED",
+      "expected_species": "Robusta",
+      "total_rows": 28,
+      "total_cols": 44,
+      "zero_cup_points_rows": 0,
+      "errors": [],
+      "warnings": []
+    }
+  }
+}

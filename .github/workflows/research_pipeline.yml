@@ -1,0 +1,41 @@
+name: Research Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install -e . --no-deps
+          python -m src.cleaning.validate_seoul
+          pytest -v
+
+  analyze_market:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Market analysis module ready to be wired in Phase 3 (M3)."
+
+  analyze_cqi:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "CQI analysis module ready to be wired in Phase 4 (M4)."
+
+  build_report:
+    needs: [analyze_market, analyze_cqi]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Report builder ready to be wired in Phase 8 (M8)."

@@ -1,0 +1,57 @@
+name: Collect Seoul Open Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      datasets:
+        description: "Space-separated dataset keys or 'all'"
+        required: false
+        default: "all"
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install -e . --no-deps
+
+      - name: Collect Seoul Open Data
+        run: |
+          if [ "${{ inputs.datasets }}" = "all" ]; then
+            python -m src.collectors.seoul_open_data
+          else
+            python -m src.collectors.seoul_open_data --datasets ${{ inputs.datasets }}
+          fi
+
+      - name: Validate collected datasets (including commercial)
+        run: |
+          python -c "from src.cleaning.validate_seoul import run_validation; import sys, json; r = run_validation(require_commercial=True); print(json.dumps(r, ensure_ascii=False, indent=2)); sys.exit(0 if r['overall_status'] == 'VALIDATED' else 1)"
+
+      - name: Build processed CS100010 datasets
+        run: |
+          python -m src.cleaning.build_processed
+
+      - name: Upload collection & validation metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: seoul-collection-metadata-${{ github.run_id }}
+          path: |
+            data/metadata/collection_log.csv
+            data/metadata/source_registry.csv
+            data/metadata/validation_results.json
+            data/processed/seoul/

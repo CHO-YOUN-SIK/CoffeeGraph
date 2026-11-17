@@ -1,0 +1,61 @@
+datasets:
+  seoul_store_district:
+    id: OA-22173
+    name: "서울시 상권분석서비스(점포-자치구)"
+    api_service: VwsmSignguStorW
+    source_url: "https://data.seoul.go.kr/dataList/OA-22173/S/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-22173_store_district.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  seoul_sales_district:
+    id: OA-22176
+    name: "서울시 상권분석서비스(추정매출-자치구)"
+    api_service: VwsmSignguSelngW
+    source_url: "https://data.seoul.go.kr/dataList/OA-22176/A/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-22176_sales_district.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  seoul_store_commercial:
+    id: OA-15577
+    name: "서울시 상권분석서비스(점포-상권)"
+    api_service: VwsmTrdarStorW
+    source_url: "https://data.seoul.go.kr/dataList/OA-15577/A/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-15577_store_commercial.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  seoul_sales_commercial:
+    id: OA-15572
+    name: "서울시 상권분석서비스(추정매출-상권)"
+    api_service: VwsmTrdarSelngW
+    source_url: "https://data.seoul.go.kr/dataList/OA-15572/A/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-15572_sales_commercial.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  cqi_arabica:
+    id: CQI-ARABICA
+    name: "CQI Coffee Quality Database (Arabica)"
+    source_url: "https://github.com/jldbc/coffee-quality-database"
+    download_url: "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
+    encoding: "utf-8"
+    raw_path: "data/raw/cqi/arabica_data_cleaned.csv"
+    license: "Public / GitHub jldbc/coffee-quality-database"
+  cqi_robusta:
+    id: CQI-ROBUSTA
+    name: "CQI Coffee Quality Database (Robusta)"
+    source_url: "https://github.com/jldbc/coffee-quality-database"
+    download_url: "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/robusta_data_cleaned.csv"
+    encoding: "utf-8"
+    raw_path: "data/raw/cqi/robusta_data_cleaned.csv"
+    license: "Public / GitHub jldbc/coffee-quality-database"
