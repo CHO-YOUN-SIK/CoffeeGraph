@@ -1,11 +1,10 @@
-"""Phase 7 & 8 (M7-M8): Automated Report & Evidence Ledger Generator.
+"""Phase 7 & 8 (M7-M8): Automated Report & Evidence Ledger Generator (Audited).
 
 Generates the 4 Korean Markdown reports in outputs/reports/ and
-research/evidence/evidence_ledger.csv directly from computed tables and JSONs:
-  A. Market Structure Report
-  B. CQI Quality Report
-  C. Brand Positioning Report
-  D. Coffee Brand Opportunity Report (Steps 1-5, BX/CX Insights & Falsifiable Hypotheses)
+research/evidence/evidence_ledger.csv directly from computed tables and JSONs,
+with strict separation of Observed vs Interpretation vs Hypothesis vs Unknown,
+explicit sample-selection funnels, cluster validity metrics, and
+Context-Join disclaimers.
 """
 
 from __future__ import annotations
@@ -20,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TABLES_DIR = ROOT / "outputs" / "tables"
 REPORTS_DIR = ROOT / "outputs" / "reports"
 EVIDENCE_DIR = ROOT / "research" / "evidence"
+METADATA_DIR = ROOT / "data" / "metadata"
 
 
 def generate_reports() -> list[Path]:
@@ -27,17 +27,35 @@ def generate_reports() -> list[Path]:
     EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
 
     mkt = json.loads((TABLES_DIR / "seoul_market_correlations.json").read_text(encoding="utf-8"))
-    q_df = pd.read_csv(TABLES_DIR / "seoul_market_quarterly.csv", dtype={"기준_년분기_코드": str})
     dist_261 = pd.read_csv(TABLES_DIR / "seoul_district_summary_20261.csv", dtype={"자치구_코드": str})
     cluster_prof = pd.read_csv(TABLES_DIR / "seoul_commercial_cluster_profiles.csv")
+    cluster_val = json.loads((TABLES_DIR / "seoul_commercial_cluster_validation.json").read_text(encoding="utf-8"))
+    cluster_dist = pd.read_csv(TABLES_DIR / "seoul_commercial_cluster_distributions.csv")
 
     cqi = json.loads((TABLES_DIR / "cqi_regression_summary.json").read_text(encoding="utf-8"))
     cqi_country = pd.read_csv(TABLES_DIR / "cqi_country_summary.csv")
     cqi_proc = pd.read_csv(TABLES_DIR / "cqi_processing_summary.csv")
 
     brand_sum = pd.read_csv(TABLES_DIR / "brand_positioning_summary.csv")
+    reg_df = pd.read_csv(ROOT / "data" / "raw" / "brands" / "official_brand_registry.csv")
+    if "brand_segment" not in brand_sum.columns and "brand_segment" in reg_df.columns:
+        brand_sum = brand_sum.merge(reg_df[["brand_id", "brand_segment"]], on="brand_id", how="left")
+
     cross_brand = pd.read_csv(TABLES_DIR / "cross_brand_market_context.csv")
     cross_json = json.loads((TABLES_DIR / "cross_analysis_summary.json").read_text(encoding="utf-8"))
+    val_res = json.loads((METADATA_DIR / "validation_results.json").read_text(encoding="utf-8"))
+
+    total_brands = int(brand_sum["brand_id"].nunique())
+    specialty_brands = int((brand_sum["brand_segment"] != "Franchise Reference").sum())
+    franchise_brands = int((brand_sum["brand_segment"] == "Franchise Reference").sum())
+    total_skus = int(brand_sum["sku_count"].sum())
+
+    seoul_raw_total = sum(
+        val_res["datasets"][k]["total_rows"]
+        for k in ["seoul_store_district", "seoul_sales_district", "seoul_store_commercial", "seoul_sales_commercial"]
+    )
+    funnel = cluster_val["selection_funnel"]
+    k_eval_df = pd.DataFrame(cluster_val["k_sweep_2_to_6"])
 
     # --- Report A: Market Structure Report ---
     top5_dist = dist_261.head(5)[["자치구_코드_명", "전체_점포_수", "점포_증감률_pct", "점포당_추정매출_억원", "프랜차이즈_비중_pct"]]
@@ -45,10 +63,12 @@ def generate_reports() -> list[Path]:
     corr_sps = mkt["correlations_20242_to_20261"]["sales_per_store_vs_store_change_pct"]
     corr_fr = mkt["correlations_20242_to_20261"]["franchise_share_vs_store_change_pct"]
 
+    key_dist_vars = cluster_dist[cluster_dist["variable"].isin(["점포당_매출_원", "주말_비중_pct", "시간_11~14_pct"])]
+
     report_a = f"""# A. 서울 커피 시장 구조 분석 보고서 (Market Structure Report)
 
 - **분석 대상**: 서울특별시 25개 자치구 및 상권 (`CS100010` 커피-음료)
-- **출처**: 서울 열린데이터광장 공식 원본 (`OA-22173`, `OA-22176`, `OA-15577`, `OA-15572`)
+- **출처**: 서울 열린데이터광장 공식 원본 (`OA-22173`, `OA-22176`, `OA-15577`, `OA-15572`, 4종 합계 원본 **{seoul_raw_total:,}행**)
 - **기준 분기**: `20261` (비교 기간: `20242`~`20261`, 최신 `20262` 병기)
 
 ## 1. 서울 전체 시장 추이 (Observed)
@@ -71,8 +91,23 @@ def generate_reports() -> list[Path]:
 
 ![자치구별 점포당 추정매출과 점포 변화율](../figures/fig02_district_store_change_vs_sales.png)
 
-## 3. 상권 소비 맥락 군집 (`20261`, 매칭 상권 n=1,064)
+## 3. 상권 선정 과정 및 소비 맥락 군집 타당성 (`20261`)
+- **표본 선정 깔때기(Selection Funnel)**:
+  - `OA-15577` (점포-상권 `20261`, `CS100010`): **{funnel['store_commercial_areas_20261']:,}개** 상권
+  - `OA-15572` (추정매출-상권 `20261`, `CS100010`): **{funnel['sales_commercial_areas_20261']:,}개** 상권 (소규모·정보보호 마스킹 등으로 매출 미제공 **{funnel['unmatched_store_only_areas_masked']:,}개** 상권 제외)
+  - `상권_코드` 내부 결합(Inner Join) 및 결측 제거 후 최종 분석 대상: **{funnel['valid_after_dropna']:,}개** 상권
+- **군집 타당성 및 한계 (Cluster Validity)**:
+  - `k=4` Silhouette Score = **{cluster_val['silhouette_score']}**, 5개 시드 반복 Adjusted Rand Index(ARI) = **{cluster_val['mean_ari_across_5_seeds']}**.
+  - Silhouette Score가 `0.18` 수준으로 낮으므로, 4개 군집은 경계가 완전히 단절된 이산 집단이라기보다 **연속적인 상권 시간·연령 스펙트럼 위의 탐색적 유형화(Archetypes)**로 해석해야 한다.
+
+### `k=2~6` 군집 타당성 지표 비교
+{k_eval_df.to_markdown(index=False)}
+
+### `k=4` 군집별 평균 프로파일
 {cluster_prof[['cluster_label', 'commercial_area_count', '주말_비중_pct', '시간_06~11_pct', '시간_11~14_pct', '시간_17~21_pct', '점포당_매출_원']].to_markdown(index=False)}
+
+### 군집별 주요 변수 분포 (평균·표준편차·사분위수)
+{key_dist_vars.to_markdown(index=False)}
 
 ![상권 소비 맥락 군집](../figures/fig03_commercial_context_clusters.png)
 """
@@ -105,80 +140,94 @@ def generate_reports() -> list[Path]:
     # --- Report C: Brand Positioning Report ---
     report_c = f"""# C. 브랜드 포지셔닝 및 향미 언어 분석 보고서 (Brand Positioning Report)
 
-- **수집 원칙**: 서울 주요 상권에서 매장을 운영하는 7개 스페셜티 브랜드의 **공식 온라인몰(`official_online_mall`)**에서 직접 수집·검증한 원두 SKU 전수(중복 제거 후 **n={int(brand_sum['sku_count'].sum())}개**).
-- **채널 구분**: 모든 레코드는 온라인몰 공식 판매 SKU이며, 개별 오프라인 매장의 현장 취급 SKU와는 구분하여 해석한다.
+- **표본 구성**: 총 **{total_brands}개 브랜드** (서울 스페셜티 로스터리 **{specialty_brands}개** + 대중 프랜차이즈 비교군 **{franchise_brands}개** `paul_bassett`)
+- **수집 원칙**: 각 브랜드의 **공식 온라인몰/카탈로그(`official_online_mall` / `official_online_catalog`)**에서 직접 수집·검증한 원두 SKU 전수(중복 제거 후 **n={total_skus}개**).
+- **채널 구분**: 모든 레코드는 온라인 공식 카탈로그 기준이며, 개별 오프라인 매장의 현장 취급 SKU나 브랜드 실제 매출을 의미하지 않는다.
 
 ## 1. 브랜드별 포트폴리오 및 가격·언어 비교 (Observed)
-{brand_sum[['brand_id', 'sku_count', 'median_price_per_100g', 'single_origin_share_pct', 'mean_sensory_dims', 'pct_과일', 'pct_초콜릿', 'pct_산미', 'pct_감성적·추상적']].to_markdown(index=False)}
+{brand_sum[['brand_id', 'brand_segment', 'sku_count', 'median_price_per_100g', 'single_origin_share_pct', 'mean_sensory_dims', 'pct_과일', 'pct_초콜릿', 'pct_산미', 'pct_감성적·추상적']].to_markdown(index=False)}
 
-## 2. 탐색 UX 관찰 요약
+## 2. 탐색 UX 및 입지 맥락 참고 (Context Only)
 {brand_sum[['brand_id', 'seoul_districts', 'primary_context', 'ux_notes']].to_markdown(index=False)}
 """
     (REPORTS_DIR / "C_Brand_Positioning_Report.md").write_text(report_c, encoding="utf-8")
 
     # --- Report D: Coffee Brand Opportunity Report (Steps 1-5) ---
+    cross_display = cross_brand.rename(
+        columns={
+            "avg_district_sales_per_store_eok": "입지자치구_업종평균_점포당매출_억원",
+            "avg_district_lunch_11_14_pct": "입지자치구_11~14시_비중_pct",
+            "avg_district_weekend_pct": "입지자치구_주말_비중_pct",
+        }
+    )
+
     report_d = f"""# D. Coffee Brand Opportunity Report — 통합 BX/CX 인사이트 및 검증 가능한 가설
 
-## Step 1. 사용한 데이터
-1. **서울 열린데이터광장 공식 원본**: `OA-22173`(점포-자치구 54,765행), `OA-22176`(추정매출-자치구 33,803행), `OA-15577`(점포-상권 456,659행), `OA-15572`(추정매출-상권 128,053행) — `CS100010`(커피-음료) 전수 검증(`VALIDATED`).
-2. **CQI Coffee Quality Database**: Arabica 1,311건 + Robusta 28건 = 1,339건 전수(`VALIDATED`).
-3. **브랜드 공식 온라인몰 원두 SKU**: 7개 브랜드 공식몰 직접 수집 검증 SKU **n={int(brand_sum['sku_count'].sum())}** (`official_online_mall`).
+## Step 1. 사용한 데이터 및 재현성 범위
+1. **서울 열린데이터광장 공식 원본 (총 {seoul_raw_total:,}행)**:
+   - `OA-22173`(점포-자치구 {val_res['datasets']['seoul_store_district']['total_rows']:,}행), `OA-22176`(추정매출-자치구 {val_res['datasets']['seoul_sales_district']['total_rows']:,}행), `OA-15577`(점포-상권 {val_res['datasets']['seoul_store_commercial']['total_rows']:,}행), `OA-15572`(추정매출-상권 {val_res['datasets']['seoul_sales_commercial']['total_rows']:,}행).
+   - 필터 조건: `서비스_업종_코드 == 'CS100010'`(커피-음료). 상권 단위 `20261` 매칭: 점포 상권 {funnel['store_commercial_areas_20261']:,}개 중 매출 제공 상권 **{funnel['sales_commercial_areas_20261']:,}개** 내부 결합(`n=1,064`).
+2. **CQI Coffee Quality Database**: Arabica 1,311건 + Robusta 28건 = **{cqi['total_records']:,}건** 전수 (`VALIDATED`).
+3. **브랜드 공식 온라인몰 원두 SKU**: 총 **{total_brands}개 브랜드**(스페셜티 {specialty_brands}개 + 프랜차이즈 비교군 {franchise_brands}개) 직접 수집 검증 SKU **n={total_skus}**.
 
-## Step 2. 개별 데이터 분석 요약
-- **서울 시장**: `20242`→`20261` 점포 수 28,639→27,333개(25개 구 중 23개 구 감소). 프랜차이즈 비중과 점포 변화율은 무관($r=0.0145, p=0.945$)한 반면, 점포당 추정매출과는 양의 상관($r=0.5641, p=0.0033$)을 보인다. `20261` 매칭 상권(n=1,064)은 **오피스·점심 집중형(n=275, 점포당 매출 2,283만 원)**, **주말·방문형(n=269, 2,197만 원)**, **모닝·복합형(n=484, 1,943만 원)**, **저녁·생활형(n=36, 878만 원)**으로 구분된다.
+## Step 2. 개별 데이터 분석 요약 (Observed)
+- **서울 시장**: `20242`→`20261` 점포 수 28,639→27,333개(25개 구 중 23개 구 감소, `20262` 27,351개). 프랜차이즈 비중과 점포 변화율은 무관($r=0.0145, p=0.945$)한 반면, 점포당 추정매출과는 양의 상관($r=0.5641, p=0.0033$)을 보인다. `20261` 매칭 상권(n=1,064)의 `k=4` 군집은 Silhouette **{cluster_val['silhouette_score']}**(ARI {cluster_val['mean_ari_across_5_seeds']})의 연속적 유형을 보인다.
 - **CQI 품질**: Natural vs Washed 원차이 +0.39점은 산지 통제 후 +0.27점($p=0.2585$)으로 통계적 유의성이 사라진다.
-- **브랜드 언어**: 스페셜티 브랜드 간에도 감성적·추상적 서사 비중이 높은 브랜드와 산지·가공법·감각 어휘(과일·산미·바디)를 전면에 두는 브랜드가 뚜렷이 분화된다.
+- **브랜드 언어**: {total_brands}개 브랜드(129 SKU) 간에도 감성·추상 서사 비중(0%~100%)과 감각 어휘 밀도(0.10~4.00)의 분화가 뚜렷하다.
 
 ## Step 3. 데이터 교차 분석 (4-Level Join)
-{cross_brand[['brand_id', 'avg_district_sales_per_store_eok', 'avg_district_lunch_11_14_pct', 'avg_district_weekend_pct', 'sku_count', 'median_price_per_100g', 'mean_sensory_dims', 'pct_감성적·추상적']].to_markdown(index=False)}
+> **방법론적 주의 (Context Join ≠ Brand Performance)**: 아래 표의 자치구 지표는 각 브랜드의 주요 매장이 위치한 **자치구의 `CS100010` 업종 전체 평균(시장 배경)**이며, **개별 브랜드의 실제 매장 매출이나 고객 구성을 의미하지 않는다.**
+
+{cross_display[['brand_id', '입지자치구_업종평균_점포당매출_억원', '입지자치구_11~14시_비중_pct', '입지자치구_주말_비중_pct', 'sku_count', 'median_price_per_100g', 'mean_sensory_dims', 'pct_감성적·추상적']].to_markdown(index=False)}
 
 ## Step 4. BX/CX 인사이트
 
-### Insight 1. 상권 시간대 집중도("오피스·점심형" vs "주말·방문형")와 원두 탐색 마찰(Exploration Friction)
-- **관찰된 데이터**: 오피스·점심 집중형 상권(n=275)은 `11~14시` 매출 비중이 **48.28%**에 달하며 점포당 매출이 가장 높다(2,283만 원). 반면 주말·방문형 상권(n=269)은 주말 비중이 **35.42%**로 분산된다.
-- **정량적 근거**: 상권 군집 분석(`k=4`, n=1,064) 및 브랜드별 주요 입지 자치구 평균 `11~14시` 비중 비교.
-- **시각화**: `outputs/figures/fig03_commercial_context_clusters.png`
-- **해석**: 점심 피크에 집중된 상권의 방문객은 메뉴·원두를 빠르게 결정해야 하는 시간 압박이 큰 반면, 주말·방문형 상권에서는 체류·탐색 여유가 크다.
-- **관련 이론**: 인지 부하 이론(Cognitive Load Theory) 및 선택 과부하(Choice Overload, Iyengar & Lepper).
-- **대안적 설명**: 오피스 상권의 높은 점포당 매출은 원두 선택 경험이 아니라 단순 유동인구·테이크아웃 회전율의 결과일 수 있다.
-- **반례**: 블루보틀·센터커피 등 일부 브랜드는 오피스·복합 상권에서도 다수의 싱글오리진/감성 서사를 유지하며 높은 객단가를 형성한다.
-- **BX/CX 관점의 의미**: 동일 브랜드라도 오피스·점심형 접점에서는 "산미/바디 2축 요약·빠른 추천"이, 주말·방문형 접점에서는 "산지·가공 스토리텔링·테이스팅 비교"가 탐색 마찰을 줄일 수 있다.
-- **근거 신뢰도**: **Medium** (상권 집계 매출과 온라인몰 UX의 Context Join이므로 매장 내 구매 행동 직접 측정 필요).
+### Insight 1. 상권 시간대 집중도("오피스·점심형" vs "주말·방문형")와 탐색 마찰 가능성
+- **관찰된 데이터 (Observed)**: 오피스·점심 집중형 상권(n=275)은 `11~14시` 매출 비중이 평균 **48.28%**인 반면, 주말·방문형 상권(n=269)은 주말 비중이 **35.42%**이다.
+- **정량적 근거**: 상권 군집 분석(`k=4`, n=1,064, Silhouette={cluster_val['silhouette_score']}).
+- **시각화**: `outputs/figures/coffee_opportunity_map.html`, `outputs/figures/fig03_commercial_context_clusters.png`
+- **해석 (Interpretation)**: 점심 시간대 매출 집중도가 높은 상권에서는 방문객의 의사결정 시간 압박이 상대적으로 클 가능성이 있다. 단, 이는 **상권 집계 매출 패턴에서 추론한 해석일 뿐, 실제 고객의 메뉴 선택 소요시간이나 혼잡도를 직접 측정한 결과는 아니다.**
+- **관련 이론**: 인지 부하 이론(Cognitive Load Theory) 및 선택 과부하(Choice Overload).
+- **대안적 설명**: 오피스 상권의 높은 매출 집중은 탐색 마찰이 아니라 단순 직장인 유동인구·아메리카노 반복 구매 습관의 결과일 수 있다.
+- **반례**: 블루보틀·센터커피 등은 오피스·복합 상권에서도 다수의 싱글오리진/감성 서사를 유지한다.
+- **BX/CX 관점의 의미**: 상권 맥락에 따라 탐색 정보 밀도(빠른 2축 요약 vs 심층 스토리텔링)를 차등화할 가설적 여지가 있다.
+- **근거 신뢰도**: **Medium-Low** (상권 집계 매출 기반 맥락 추론; 실제 선택 시간·혼잡도·주문 로그 미확보).
 
 ### Insight 2. 가공법·산지 커뮤니케이션과 품질 신호의 비대칭
-- **관찰된 데이터**: CQI 전수(1,310 유효 Arabica)에서 Natural과 Washed의 차이는 산지 통제 시 유의하지 않다($+0.2657, p=0.2585$). 한편 국내 7개 브랜드의 다수 블렌드/상시 원두는 산지·가공법 표기가 생략되거나 감성적·추상적 표현(전체 {cross_json['reference_cqi_vs_brands']['brand_process_mentions'].get('Unspecified', 0)}건 미표기)과 혼재한다.
+- **관찰된 데이터 (Observed)**: CQI 유효 Arabica(n=1,310)에서 Natural vs Washed 차이는 산지 통제 시 유의하지 않다($+0.2657, p=0.2585$). 한편 {total_brands}개 브랜드(129 SKU) 중 다수 제품이 가공법({cross_json['reference_cqi_vs_brands']['brand_process_mentions'].get('Unspecified', 0)}건)·산지({cross_json['reference_cqi_vs_brands']['brand_top_origins'].get('Unspecified/Blend', 0)}건)를 미표기하거나, 감성 서사 단독 또는 전문 스펙 단독으로 제시한다.
 - **정량적 근거**: `cqi_regression_summary.json`, `brand_positioning_summary.csv`.
-- **시각화**: `outputs/figures/fig04_cqi_processing_and_country.png`
-- **해석**: "내추럴=고품질"이라는 단순 도식은 국제 커핑 데이터로 뒷받침되지 않는다. 소비자에게 필요한 것은 가공법 명칭 자체보다 "이 원두가 어떤 감각(산미·단맛·바디)으로 경험되는가"의 번역이다.
-- **관련 이론**: 신호 이론(Signaling Theory) 및 감각 어휘의 정보 비대칭 해소.
-- **대안적 설명**: 스페셜티 핵심 고객층은 가공법(Natural/Anaerobic)을 품질 점수가 아니라 향미 스타일(발효향/과일향)의 대리 지표로 활용한다.
-- **반례**: 게이샤·아나로빅 등 고가 마이크로랏 SKU에서는 가공법과 농장 스펙 자체가 희소성·가격 정당화 신호로 작동한다.
-- **BX/CX 관점의 의미**: 가공법·산지 전문 용어를 감각 프로필(산미/단맛/바디/향미 톤)과 병기하는 이중 번역(Dual-Layer Flavor Copy)이 초심자·숙련자 모두의 선택 확신을 높일 수 있다.
-- **근거 신뢰도**: **High** (CQI 전수 통제 회귀 + 공식 브랜드 SKU 텍스트 코드북 실측).
+- **시각화**: `outputs/figures/fig04_cqi_processing_and_country.png`, `outputs/figures/coffee_opportunity_map.html`
+- **해석 (Interpretation)**: 가공법 명칭 자체의 품질 신호 한계를 감안할 때, 전문 스펙과 직관적 감각 어휘를 함께 번역해 주는 것이 소비자의 이해를 도울 가능성이 있다. 단, **실제 소비자의 정보 이해도·구매 확신·전환율 변화는 본 데이터셋에서 측정되지 않았다(Unknown).**
+- **관련 이론**: 신호 이론(Signaling Theory) 및 정보 비대칭 해소.
+- **대안적 설명**: 기존 브랜드 충성 고객은 상세 카피를 읽지 않고 익숙한 시그니처 메뉴나 가격대만으로 선택할 수 있다.
+- **반례**: 펠트·커피리브레 등 하이엔드 스페셜티 소비자는 감성 서사보다 산지·품종·가공법 스펙 자체를 선호할 수 있다.
+- **BX/CX 관점의 의미**: 정보 표현 방식(감성 vs 스펙 vs 이중 레이어)이 실제 이해도와 선택 전환에 미치는 영향을 검증하는 것이 핵심 후속 과제다.
+- **근거 신뢰도**: **Medium** (공급자 측 품질·언어 데이터는 실측 완료되었으나, 수요자 측 이해·행동 반응은 미측정).
 
-## Step 5. 검증 가능한 후속 가설
+## Step 5. 검증 가능한 후속 가설 및 다음 연구 질문
+> **핵심 후속 연구 질문**: *"원두 정보 표현 방식(감성 서사 vs 전문 스펙 vs 감각 번역)의 차이가 실제로 고객의 이해도·선택 소요시간·구매 전환에 어떤 영향을 미치는가?"*
 
-### Hypothesis 1. 상권 맥락 맞춤형 원두 탐색 UI와 선택 전환율
-- **가설 문장**: 오피스·점심 집중형 상권 매장(또는 모바일 오더)에서 원두를 "산미/바디 2축 + 상황 태그(빠른 선택)"로 압축 제시할 경우, 전문 스펙(산지·가공법)만 제시할 때보다 원두 선택 소요 시간은 단축되고 스페셜티/싱글오리진 업셀링 전환율은 상승할 것이다.
+### Hypothesis 1. 상권 맥락 맞춤형 원두 탐색 UI와 선택 소요시간·전환율
+- **가설 문장**: 오피스·점심 집중형 상권 매장(또는 모바일 오더)에서 원두를 "산미/바디 2축 + 상황 태그"로 압축 제시할 경우, 전문 스펙만 제시할 때보다 선택 소요시간이 단축되고 전환율이 상승할 것이다.
 - **근거**: 오피스·점심형 상권의 11~14시 매출 집중도(48.28%) vs 주말·방문형(28.72%).
-- **예상 관계**: 시간 압박이 높은 상권일수록 2축 요약형 탐색 UI의 전환율 개선 폭이 클 것이다(상호작용 효과).
-- **반증 조건**: A/B 테스트에서 시간대별 상권 간 전환율·소요시간 차이가 통계적으로 유의하지 않거나($p \\ge 0.05$), 오피스 상권 고객이 원두 선택 자체에 무관심(기본 블렌드 고정)한 경우.
-- **필요한 추가 자료**: 매장 POS/모바일 오더의 시간대별 SKU 선택 로그, 메뉴 탐색 체류시간.
-- **검증 방법**: 오피스형 매장 vs 주말·방문형 매장에서 모바일 오더/키오스크 UI A/B 테스트.
-- **브랜드 전략과의 연결**: 상권 유형별 매장 CX(메뉴판·스마트오더 정보 밀도) 차등 설계.
+- **예상 관계**: 시간 압박이 높은 상권일수록 2축 요약형 탐색 UI의 전환율 개선 폭이 클 것이다.
+- **반증 조건**: A/B 테스트에서 상권 간 전환율·소요시간 차이가 유의하지 않거나($p \\ge 0.05$), 오피스 고객이 원두 선택 자체에 무관심한 경우.
+- **필요한 추가 자료**: 매장 POS/모바일 오더 시간대별 선택 로그, 대기열 혼잡도, 메뉴 체류시간.
+- **검증 방법**: 오피스형 vs 주말·방문형 매장 모바일 오더 UI A/B 테스트.
+- **브랜드 전략과의 연결**: 상권 유형별 매장·앱 메뉴 정보 밀도 차등 설계.
 
-### Hypothesis 2. 감성 서사 + 감각 번역(이중 레이어) 카피와 구매 의도
-- **가설 문장**: 감성적·추상적 제품명/서사만 제공하는 원두 설명에 비해, 감성 서사와 3대 감각 지표(산미·단맛·바디) 및 친숙한 향미 앵커(과일/초콜릿/견과류)를 함께 제공하는 경우 신규 고객의 원두 구매 의도와 기대 일치도가 유의하게 높을 것이다.
-- **근거**: 브랜드별 감성 서사 비중 편차(0%~100%) 및 CQI에서 가공법 단독 품질 신호의 한계.
-- **예상 관계**: 커피 관여도가 낮은 소비자군에서 이중 레이어 카피의 구매 의도 상승 효과가 특히 클 것이다.
-- **반증 조건**: 실험 설문에서 이중 레이어 카피가 브랜드 감성/프리미엄 인식을 오히려 훼손하거나 구매 의도 차이가 없는 경우.
+### Hypothesis 2. 이중 레이어(감성 + 감각 번역) 카피와 고객 이해도·구매 의도
+- **가설 문장**: 감성·추상 서사 단독 또는 스펙 단독 설명에 비해, 감성 서사와 3대 감각 지표(산미·단맛·바디) 및 친숙한 향미 앵커를 병기하는 경우 비전문 소비자의 정보 이해도와 원두 구매 의도가 유의하게 높을 것이다.
+- **근거**: {total_brands}개 브랜드 간 감성·추상 비중(0%~100%) 편차 및 CQI 가공법 단독 신호의 한계.
+- **예상 관계**: 커피 관여도가 낮은 소비자군에서 이중 레이어 카피의 이해도·구매 의도 상승 효과가 클 것이다.
+- **반증 조건**: 무작위 배정 실험에서 카피 유형 간 이해도·구매 의도 차이가 없거나 이중 레이어가 정보 과부하를 유발하는 경우.
 - **필요한 추가 자료**: 소비자 관여도별 온라인 실험(Online Randomized Experiment) 데이터.
-- **검증 방법**: 동일 가격·산지 조건에서 카피 유형(감성 단독 vs 스펙 단독 vs 이중 레이어) 3집단 무작위 배정 실험.
-- **브랜드 전략과의 연결**: 온라인몰 상세페이지(PDP) 및 패키지 백 라벨 정보 아키텍처 표준화.
+- **검증 방법**: 동일 가격·산지 조건에서 카피 유형 3집단(감성 단독 vs 스펙 단독 vs 이중 레이어) A/B/C 실험.
+- **브랜드 전략과의 연결**: 공식 온라인몰 상세페이지(PDP) 및 패키지 라벨 표준화.
 """
     (REPORTS_DIR / "D_Coffee_Brand_Opportunity_Report.md").write_text(report_d, encoding="utf-8")
 
-    # --- Evidence Ledger (Source -> Raw -> Cleaning -> Analysis -> Observation -> Interpretation -> Hypothesis) ---
+    # --- Evidence Ledger ---
     ledger_rows = [
         {
             "evidence_id": "EV-01",
@@ -187,7 +236,7 @@ def generate_reports() -> list[Path]:
             "cleaning": "src/cleaning/validate_seoul.py, build_processed.py",
             "analysis": "src/analysis/market_structure.py",
             "observation": "20261 서울 커피·음료 점포 27,333개(20242 대비 23/25개 구 감소); 점포당 매출 vs 점포 변화율 r=0.5641(p=0.0033), 프랜차이즈 비중 r=0.0145(p=0.945)",
-            "interpretation": "상권 생존·유지력은 프랜차이즈 여부보다 점포당 매출 창출력과 강하게 연동됨",
+            "interpretation": "자치구 단위 점포 유지력은 프랜차이즈 여부보다 점포당 매출 창출력과 강하게 연동됨",
             "hypothesis": "H1 (상권 맥락 맞춤형 탐색 UX)",
         },
         {
@@ -196,8 +245,8 @@ def generate_reports() -> list[Path]:
             "raw_data": "data/processed/seoul/cs100010_store_commercial.csv, cs100010_sales_commercial.csv",
             "cleaning": "src/cleaning/validate_seoul.py, build_processed.py",
             "analysis": "src/analysis/consumer_context.py",
-            "observation": "20261 매칭 상권 n=1,064 KMeans(k=4) 결과 오피스·점심 집중형(11~14시 48.28%, 점포당 2,283만원)과 주말·방문형(주말 35.42%) 등 4개 맥락 확인",
-            "interpretation": "상권별 방문 시간압박과 소비 목적이 상이하므로 메뉴·원두 탐색 마찰의 크기 역시 다를 수 있음",
+            "observation": f"20261 상권 1,519개 중 매출 매칭 1,064개 KMeans(k=4, Silhouette={cluster_val['silhouette_score']}, ARI={cluster_val['mean_ari_across_5_seeds']}) 결과 4개 소비 맥락 유형 확인",
+            "interpretation": "상권별 시간대 매출 집중도가 상이하므로 방문객의 의사결정 시간 압박이 다를 수 있음(행동 로그 검증 필요)",
             "hypothesis": "H1 (오피스형 vs 주말형 UI 차등 설계)",
         },
         {
@@ -212,13 +261,13 @@ def generate_reports() -> list[Path]:
         },
         {
             "evidence_id": "EV-04",
-            "source": "7개 스페셜티 브랜드 공식 온라인몰",
+            "source": f"{total_brands}개 브랜드 공식 온라인몰/카탈로그",
             "raw_data": "data/raw/brands/official_brand_beans_raw.csv",
             "cleaning": "src/analysis/brand_positioning.py",
             "analysis": "src/analysis/brand_positioning.py, cross_analysis.py",
-            "observation": "공식 검증 원두 SKU 전수에서 감성적·추상적 언어와 감각 어휘(과일·산미·초콜릿·바디)의 결합 수준이 브랜드별로 크게 분화됨",
-            "interpretation": "감성 서사 단독 또는 전문 스펙 단독 전달은 비전문 소비자의 선택 확신을 저해할 수 있음",
-            "hypothesis": "H2 (이중 레이어 카피와 구매 의도)",
+            "observation": f"공식 검증 원두 {total_skus}개 SKU 전수에서 감성·추상 비중(0%~100%)과 감각 어휘 밀도(0.10~4.00)가 브랜드별로 크게 분화됨",
+            "interpretation": "표현 방식의 차이는 확인되었으나 실제 소비자 이해도·구매 전환 영향은 미측정 상태(Unknown)",
+            "hypothesis": "H2 (이중 레이어 카피와 이해도·구매 의도 실험)",
         },
     ]
     ledger_path = EVIDENCE_DIR / "evidence_ledger.csv"

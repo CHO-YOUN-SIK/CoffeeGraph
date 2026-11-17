@@ -1,19 +1,27 @@
-"""Phase 3 (M3): Seoul Consumer Context Analysis (Time-slot, Day-of-Week, Age, Commercial Clusters).
+"""Phase 3 (M3): Seoul Consumer Context Analysis & Cluster Validation.
 
 Analyzes district-level and commercial-area-level (상권) consumer context for
-CS100010 (커피-음료) in base quarter 20261, and performs standardized KMeans
-clustering on commercial areas to empirically identify market context archetypes.
+CS100010 (커피-음료) in base quarter 20261, logs the exact 1,519 -> 1,064
+commercial-area selection funnel, and evaluates KMeans cluster validity
+(Silhouette, Calinski-Harabasz, Davies-Bouldin, multi-seed ARI stability,
+and within-cluster variable distributions).
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import (
+    adjusted_rand_score,
+    calinski_harabasz_score,
+    davies_bouldin_score,
+    silhouette_score,
+)
 from sklearn.preprocessing import StandardScaler
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -90,7 +98,7 @@ def analyze_consumer_context(base_quarter: str = "20261", n_clusters: int = 4) -
         OUT_DIR / f"seoul_district_consumer_context_{base_quarter}.csv", index=False, encoding="utf-8-sig"
     )
 
-    # 2. Commercial-area (상권) context + KMeans clustering (20261)
+    # 2. Commercial-area (상권) selection funnel + KMeans clustering (20261)
     st_comm = pd.read_csv(STORE_COMM_PATH, dtype={"기준_년분기_코드": str, "상권_코드": str})
     sa_comm = pd.read_csv(SALES_COMM_PATH, dtype={"기준_년분기_코드": str, "상권_코드": str})
 
@@ -120,21 +128,37 @@ def analyze_consumer_context(base_quarter: str = "20261", n_clusters: int = 4) -
     valid = comm.dropna(subset=feature_cols).copy()
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(valid[feature_cols])
+
+    # Evaluate k=2..6 cluster validity metrics
+    k_eval = []
+    for k in range(2, 7):
+        km_k = KMeans(n_clusters=k, random_state=42, n_init=20)
+        lbl_k = km_k.fit_predict(X_scaled)
+        k_eval.append(
+            {
+                "k": k,
+                "silhouette": round(float(silhouette_score(X_scaled, lbl_k)), 4),
+                "calinski_harabasz": round(float(calinski_harabasz_score(X_scaled, lbl_k)), 2),
+                "davies_bouldin": round(float(davies_bouldin_score(X_scaled, lbl_k)), 4),
+            }
+        )
+
     km = KMeans(n_clusters=n_clusters, random_state=42, n_init=20)
     valid["cluster_id"] = km.fit_predict(X_scaled)
     sil = float(silhouette_score(X_scaled, valid["cluster_id"]))
 
+    # Stability across 5 random seeds (Adjusted Rand Index)
+    ari_scores = []
+    for seed in [0, 7, 21, 99, 123]:
+        km_s = KMeans(n_clusters=n_clusters, random_state=seed, n_init=20)
+        lbl_s = km_s.fit_predict(X_scaled)
+        ari_scores.append(float(adjusted_rand_score(valid["cluster_id"], lbl_s)))
+
     profile_cols = ["전체_점포_수", "프랜차이즈_비중_pct", "점포당_매출_원"] + feature_cols
-    profiles = (
-        valid.groupby("cluster_id")[profile_cols]
-        .agg(["count", "mean", "median"])
-    )
-    # Flatten profile table cleanly
     mean_prof = valid.groupby("cluster_id")[profile_cols].mean().round(2)
     mean_prof["commercial_area_count"] = valid.groupby("cluster_id").size()
     mean_prof = mean_prof.reset_index()
 
-    # Assign descriptive empirical labels based on dominant temporal/weekday features
     labels = {}
     for _, r in mean_prof.iterrows():
         cid = int(r["cluster_id"])
@@ -149,6 +173,27 @@ def analyze_consumer_context(base_quarter: str = "20261", n_clusters: int = 4) -
 
     mean_prof["cluster_label"] = mean_prof["cluster_id"].map(labels)
     valid["cluster_label"] = valid["cluster_id"].map(labels)
+
+    # Export within-cluster distributions (mean, std, median, p25, p75)
+    dist_rows = []
+    for clabel, grp in valid.groupby("cluster_label"):
+        for col in ["점포당_매출_원", "주말_비중_pct", "시간_06~11_pct", "시간_11~14_pct", "시간_17~21_pct", "연령대_20_pct", "연령대_30_pct"]:
+            s = grp[col].dropna()
+            dist_rows.append(
+                {
+                    "cluster_label": clabel,
+                    "n": int(len(grp)),
+                    "variable": col,
+                    "mean": round(float(s.mean()), 2),
+                    "std": round(float(s.std(ddof=1)), 2),
+                    "p25": round(float(s.quantile(0.25)), 2),
+                    "median": round(float(s.median()), 2),
+                    "p75": round(float(s.quantile(0.75)), 2),
+                }
+            )
+    pd.DataFrame(dist_rows).to_csv(
+        OUT_DIR / "seoul_commercial_cluster_distributions.csv", index=False, encoding="utf-8-sig"
+    )
 
     valid[
         [
@@ -167,12 +212,32 @@ def analyze_consumer_context(base_quarter: str = "20261", n_clusters: int = 4) -
 
     mean_prof.to_csv(OUT_DIR / "seoul_commercial_cluster_profiles.csv", index=False, encoding="utf-8-sig")
 
+    validation_summary = {
+        "base_quarter": base_quarter,
+        "selection_funnel": {
+            "store_commercial_areas_20261": int(st_c["상권_코드"].nunique()),
+            "sales_commercial_areas_20261": int(sa_c["상권_코드"].nunique()),
+            "unmatched_store_only_areas_masked": int(st_c["상권_코드"].nunique() - len(comm)),
+            "matched_commercial_areas": int(len(comm)),
+            "valid_after_dropna": int(len(valid)),
+        },
+        "chosen_k": n_clusters,
+        "silhouette_score": round(sil, 4),
+        "mean_ari_across_5_seeds": round(float(np.mean(ari_scores)), 4),
+        "k_sweep_2_to_6": k_eval,
+    }
+    (OUT_DIR / "seoul_commercial_cluster_validation.json").write_text(
+        json.dumps(validation_summary, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
     return {
         "base_quarter": base_quarter,
         "district_count": int(len(dist_ctx)),
         "commercial_area_count": int(len(valid)),
         "n_clusters": n_clusters,
         "silhouette_score": round(sil, 4),
+        "mean_ari_across_5_seeds": round(float(np.mean(ari_scores)), 4),
+        "selection_funnel": validation_summary["selection_funnel"],
         "cluster_summary": mean_prof[
             ["cluster_id", "cluster_label", "commercial_area_count", "주말_비중_pct", "시간_06~11_pct", "시간_11~14_pct", "시간_17~21_pct", "점포당_매출_원"]
         ].to_dict(orient="records"),
@@ -180,8 +245,6 @@ def analyze_consumer_context(base_quarter: str = "20261", n_clusters: int = 4) -
 
 
 def main() -> int:
-    import json
-
     res = analyze_consumer_context()
     print(json.dumps(res, ensure_ascii=False, indent=2))
     return 0

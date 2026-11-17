@@ -30,3 +30,12 @@ def test_brand_cross_and_reports_pipeline() -> None:
     for p in paths:
         assert p.exists()
         assert p.stat().st_size > 200
+
+    report_c = (ROOT / "outputs" / "reports" / "C_Brand_Positioning_Report.md").read_text(encoding="utf-8")
+    report_d = (ROOT / "outputs" / "reports" / "D_Coffee_Brand_Opportunity_Report.md").read_text(encoding="utf-8")
+    assert "8개 브랜드" in report_c
+    assert "n=129" in report_c
+    assert "673,280행" in report_d
+    assert "1,064" in report_d
+    assert "Context Join ≠ Brand Performance" in report_d
+    assert "Medium-Low" in report_d

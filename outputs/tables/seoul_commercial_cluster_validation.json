@@ -1,0 +1,45 @@
+{
+  "base_quarter": "20261",
+  "selection_funnel": {
+    "store_commercial_areas_20261": 1519,
+    "sales_commercial_areas_20261": 1064,
+    "unmatched_store_only_areas_masked": 455,
+    "matched_commercial_areas": 1064,
+    "valid_after_dropna": 1064
+  },
+  "chosen_k": 4,
+  "silhouette_score": 0.1798,
+  "mean_ari_across_5_seeds": 0.9815,
+  "k_sweep_2_to_6": [
+    {
+      "k": 2,
+      "silhouette": 0.1998,
+      "calinski_harabasz": 247.18,
+      "davies_bouldin": 1.7703
+    },
+    {
+      "k": 3,
+      "silhouette": 0.1727,
+      "calinski_harabasz": 200.91,
+      "davies_bouldin": 1.789
+    },
+    {
+      "k": 4,
+      "silhouette": 0.1798,
+      "calinski_harabasz": 186.02,
+      "davies_bouldin": 1.5997
+    },
+    {
+      "k": 5,
+      "silhouette": 0.1722,
+      "calinski_harabasz": 164.81,
+      "davies_bouldin": 1.7257
+    },
+    {
+      "k": 6,
+      "silhouette": 0.1747,
+      "calinski_harabasz": 150.72,
+      "davies_bouldin": 1.5704
+    }
+  ]
+}
