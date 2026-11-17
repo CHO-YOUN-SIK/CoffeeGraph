@@ -1,0 +1,22 @@
+﻿family_a,family_b,co_occur_skus,family_a_skus,family_b_skus,jaccard
+Stone/Other Fruit,Sweet/Caramel,20,42,31,0.377
+Stone/Other Fruit,Chocolate/Cocoa,14,42,24,0.269
+Stone/Other Fruit,Floral,12,42,18,0.25
+Chocolate/Cocoa,Sweet/Caramel,11,24,31,0.25
+Floral,Sweet/Caramel,10,18,31,0.256
+Berry,Stone/Other Fruit,9,12,42,0.2
+Berry,Sweet/Caramel,8,12,31,0.229
+Nutty,Chocolate/Cocoa,7,18,24,0.2
+Nutty,Sweet/Caramel,7,18,31,0.167
+Berry,Floral,6,12,18,0.25
+Berry,Chocolate/Cocoa,6,12,24,0.2
+Citrus,Stone/Other Fruit,6,10,42,0.13
+Stone/Other Fruit,Nutty,6,42,18,0.111
+Citrus,Floral,3,10,18,0.12
+Citrus,Sweet/Caramel,3,10,31,0.079
+Berry,Citrus,2,12,10,0.1
+Citrus,Nutty,2,10,18,0.077
+Floral,Chocolate/Cocoa,2,18,24,0.05
+Berry,Nutty,1,12,18,0.034
+Floral,Nutty,1,18,18,0.029
+Citrus,Chocolate/Cocoa,0,10,24,0.0

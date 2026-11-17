@@ -1,38 +1,172 @@
 {
   "total_skus": 129,
+  "comparable_whole_bean_skus": 98,
   "brand_count": 8,
-  "specificity_tier_counts": {
-    "Specific-Anchored": 75,
-    "None-Stated": 43,
-    "Broad-Only": 11
+  "product_type_counts": {
+    "whole_bean": 98,
+    "subscription": 12,
+    "drip_bag": 9,
+    "set_kit": 5,
+    "capsule": 5
   },
-  "dominant_family_counts": {
-    "Stone/Other Fruit": 50,
-    "Unspecified": 43,
-    "Chocolate/Cocoa": 14,
-    "Sweet/Caramel": 6,
-    "Nutty": 6,
-    "Berry": 5,
-    "Floral": 3,
-    "Citrus": 2
+  "all_skus": {
+    "n_skus": 129,
+    "specificity_tier_counts": {
+      "None-Stated": 63,
+      "Specific-Anchored": 48,
+      "Broad-Only": 18
+    },
+    "dominant_family_counts": {
+      "None-Stated": 63,
+      "Multi-Family (Tie)": 28,
+      "Stone/Other Fruit": 12,
+      "Sweet/Caramel": 11,
+      "Nutty": 5,
+      "Floral": 5,
+      "Chocolate/Cocoa": 5
+    },
+    "origin_type_counts": {
+      "Unspecified": 53,
+      "Blend": 43,
+      "Single Origin": 33
+    },
+    "q1_brand_vs_dominant_family": {
+      "chi2": 104.582,
+      "dof": 42,
+      "p_asymptotic": 0.0,
+      "p_monte_carlo": 0.0001,
+      "cramers_v": 0.3676,
+      "sparse_cells_lt5": 50,
+      "total_cells": 56,
+      "sparse_cell_pct": 89.3
+    },
+    "q1_collapsed_rare_categories": {
+      "chi2": 90.581,
+      "dof": 28,
+      "p_asymptotic": 0.0,
+      "p_monte_carlo": 0.0001,
+      "cramers_v": 0.419,
+      "sparse_cells_lt5": 34,
+      "total_cells": 40,
+      "sparse_cell_pct": 85.0
+    },
+    "q2_narrative_vs_specificity": {
+      "pearson_r": -0.0193,
+      "pearson_p": 0.828013,
+      "spearman_rho": 0.1459,
+      "spearman_p": 0.099062,
+      "ols_r2": 0.3138,
+      "ols_narrative_coef": 0.152,
+      "ols_narrative_p": 0.352696,
+      "ols_text_length_p": 0.170203,
+      "ols_single_origin_coef": 1.5985,
+      "ols_single_origin_p": 0.0,
+      "ols_brand_fe_r2": 0.4963,
+      "ols_brand_fe_narrative_coef": 0.0529,
+      "ols_brand_fe_narrative_p": 0.742811,
+      "ols_brand_fe_single_origin_coef": 1.2216,
+      "ols_brand_fe_single_origin_p": 0.0
+    }
   },
-  "q1_brand_vs_dominant_family": {
-    "chi2": 175.253,
-    "dof": 49,
-    "p_value": 0.0,
-    "cramers_v": 0.4405
+  "whole_bean_only": {
+    "n_skus": 98,
+    "specificity_tier_counts": {
+      "Specific-Anchored": 45,
+      "None-Stated": 38,
+      "Broad-Only": 15
+    },
+    "dominant_family_counts": {
+      "None-Stated": 38,
+      "Multi-Family (Tie)": 24,
+      "Sweet/Caramel": 11,
+      "Stone/Other Fruit": 11,
+      "Floral": 5,
+      "Chocolate/Cocoa": 5,
+      "Nutty": 4
+    },
+    "origin_type_counts": {
+      "Unspecified": 37,
+      "Single Origin": 32,
+      "Blend": 29
+    },
+    "q1_brand_vs_dominant_family": {
+      "chi2": 87.793,
+      "dof": 42,
+      "p_asymptotic": 4.5e-05,
+      "p_monte_carlo": 0.0002,
+      "cramers_v": 0.3864,
+      "sparse_cells_lt5": 53,
+      "total_cells": 56,
+      "sparse_cell_pct": 94.6
+    },
+    "q1_collapsed_rare_categories": {
+      "chi2": 87.793,
+      "dof": 42,
+      "p_asymptotic": 4.5e-05,
+      "p_monte_carlo": 0.0002,
+      "cramers_v": 0.3864,
+      "sparse_cells_lt5": 53,
+      "total_cells": 56,
+      "sparse_cell_pct": 94.6
+    },
+    "q2_narrative_vs_specificity": {
+      "pearson_r": -0.0437,
+      "pearson_p": 0.669218,
+      "spearman_rho": 0.1035,
+      "spearman_p": 0.310548,
+      "ols_r2": 0.2904,
+      "ols_narrative_coef": 0.1433,
+      "ols_narrative_p": 0.516069,
+      "ols_text_length_p": 0.458184,
+      "ols_single_origin_coef": 1.5502,
+      "ols_single_origin_p": 0.0,
+      "ols_brand_fe_r2": 0.4913,
+      "ols_brand_fe_narrative_coef": 0.0124,
+      "ols_brand_fe_narrative_p": 0.955767,
+      "ols_brand_fe_single_origin_coef": 1.1521,
+      "ols_brand_fe_single_origin_p": 1.8e-05
+    }
   },
-  "q2_narrative_vs_specificity": {
-    "pearson_r": 0.1671,
-    "pearson_p": 0.05834,
-    "spearman_rho": 0.2348,
-    "spearman_p": 0.007387,
-    "ols_controlled_r2": 0.1796,
-    "ols_narrative_coef": 0.9982,
-    "ols_narrative_p": 0.199814,
-    "ols_text_length_coef": -0.000509,
-    "ols_text_length_p": 0.534038,
-    "ols_single_origin_coef": 3.4712,
-    "ols_single_origin_p": 5e-06
-  }
+  "top_cooccurrences": [
+    {
+      "family_a": "Stone/Other Fruit",
+      "family_b": "Sweet/Caramel",
+      "co_occur_skus": 20,
+      "family_a_skus": 42,
+      "family_b_skus": 31,
+      "jaccard": 0.377
+    },
+    {
+      "family_a": "Stone/Other Fruit",
+      "family_b": "Chocolate/Cocoa",
+      "co_occur_skus": 14,
+      "family_a_skus": 42,
+      "family_b_skus": 24,
+      "jaccard": 0.269
+    },
+    {
+      "family_a": "Stone/Other Fruit",
+      "family_b": "Floral",
+      "co_occur_skus": 12,
+      "family_a_skus": 42,
+      "family_b_skus": 18,
+      "jaccard": 0.25
+    },
+    {
+      "family_a": "Chocolate/Cocoa",
+      "family_b": "Sweet/Caramel",
+      "co_occur_skus": 11,
+      "family_a_skus": 24,
+      "family_b_skus": 31,
+      "jaccard": 0.25
+    },
+    {
+      "family_a": "Floral",
+      "family_b": "Sweet/Caramel",
+      "co_occur_skus": 10,
+      "family_a_skus": 18,
+      "family_b_skus": 31,
+      "jaccard": 0.256
+    }
+  ]
 }

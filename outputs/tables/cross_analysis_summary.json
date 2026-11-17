@@ -14,22 +14,22 @@
       "Taiwan"
     ],
     "brand_top_origins": {
-      "Unspecified/Blend": 72,
+      "Unspecified/Blend": 67,
       "Ethiopia": 24,
       "Guatemala": 14,
       "Costa Rica": 11,
-      "Panama": 10,
-      "Colombia": 8,
-      "Brazil": 3,
-      "Peru": 2
+      "Colombia": 10,
+      "Brazil": 5,
+      "Kenya": 4,
+      "Panama": 3
     },
     "brand_process_mentions": {
-      "Unspecified": 75,
-      "Washed": 30,
-      "Decaf": 22,
-      "Natural": 11,
+      "Unspecified": 76,
+      "Washed": 28,
+      "Decaf": 14,
+      "Natural": 13,
       "Honey": 6,
-      "Anaerobic/Experimental": 4
+      "Anaerobic/Experimental": 5
     }
   }
 }

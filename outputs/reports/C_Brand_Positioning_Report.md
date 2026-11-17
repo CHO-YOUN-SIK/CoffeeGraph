@@ -7,14 +7,14 @@
 ## 1. 브랜드별 포트폴리오 및 가격·언어 비교 (Observed)
 | brand_id       | brand_segment       |   sku_count |   median_price_per_100g |   single_origin_share_pct |   mean_sensory_dims |   pct_과일 |   pct_초콜릿 |   pct_산미 |   pct_감성적·추상적 |
 |:---------------|:--------------------|------------:|------------------------:|--------------------------:|--------------------:|---------:|----------:|---------:|--------------:|
-| anthracite     | Specialty Roaster   |          17 |                    8750 |                      41.2 |                0.71 |      5.9 |      17.6 |      0   |          35.3 |
+| anthracite     | Specialty Roaster   |          17 |                    8750 |                      41.2 |                1.76 |     23.5 |      17.6 |     11.8 |          41.2 |
 | blue_bottle_kr | Global Specialty    |          12 |                   12875 |                      50   |                4    |     75   |      66.7 |     58.3 |          83.3 |
-| center_coffee  | Specialty Roaster   |           7 |                   12381 |                      28.6 |                1    |      0   |     100   |      0   |          71.4 |
+| center_coffee  | Specialty Roaster   |           7 |                   12381 |                      28.6 |                0    |      0   |       0   |      0   |           0   |
 | coffee_libre   | Specialty Roaster   |          32 |                    9500 |                      21.9 |                0.66 |     25   |       6.2 |      0   |           0   |
 | felt_coffee    | Specialty Roaster   |          22 |                   13250 |                      63.6 |                1.86 |     54.5 |      36.4 |      4.5 |          13.6 |
 | fritz          | Specialty Roaster   |          10 |                    9000 |                       0   |                1.6  |     40   |      20   |     30   |          30   |
 | paul_bassett   | Franchise Reference |          20 |                     nan |                      55   |                0.1  |      0   |       0   |      0   |          20   |
-| terarosa       | Specialty Roaster   |           9 |                   17200 |                       0   |                1    |      0   |       0   |      0   |         100   |
+| terarosa       | Specialty Roaster   |           9 |                   20500 |                      88.9 |                1.78 |     66.7 |      11.1 |     22.2 |          33.3 |
 
 ## 2. 탐색 UX 및 입지 맥락 참고 (Context Only)
 | brand_id       | seoul_districts                 | primary_context     | ux_notes                                |

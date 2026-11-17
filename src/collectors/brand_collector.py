@@ -184,6 +184,8 @@ def collect_blue_bottle(brand: dict[str, Any], ts: str) -> list[dict[str, Any]]:
         if "원두" not in ptype and "Coffee" not in ptype and "블렌드" not in title and "싱글" not in title and "디카페인" not in title:
             continue
         body = BeautifulSoup(p.get("body_html") or "", "html.parser").get_text(" ", strip=True)
+        body = re.sub(r"\[배송\s*안내\].*?예정", "", body)
+        body = re.sub(r"상품은\s*평균\s*1~3\s*영업일\s*내에\s*출고\s*됩니다\.?", "", body)
         variants = p.get("variants", [])
         price = None
         weight_g = extract_weight_g(title + " " + body)
@@ -211,6 +213,13 @@ def collect_blue_bottle(brand: dict[str, Any], ts: str) -> list[dict[str, Any]]:
             }
         )
     return rows
+
+
+def _strip_cafe24_boilerplate(text: str) -> str:
+    txt = re.sub(r"SOLD\s*OUT\s*이\s*상품은\s*현재\s*구매하실\s*수\s*없는\s*상품입니다\.?", "", text, flags=re.I)
+    txt = re.sub(r"SOLDOUT\s*할인가\s*:?", "", txt, flags=re.I)
+    txt = re.sub(r"제조일\s*\d{4}\.\d{2}\.\d{2}", "", txt)
+    return clean_text(txt)
 
 
 def collect_cafe24_list(brand: dict[str, Any], ts: str) -> list[dict[str, Any]]:
@@ -243,6 +252,7 @@ def collect_cafe24_list(brand: dict[str, Any], ts: str) -> list[dict[str, Any]]:
             prod_url = urljoin(brand["official_url"], a_el["href"]) if a_el else cat_url
             price = extract_price(raw_txt)
             weight_g = extract_weight_g(title + " " + raw_txt) or brand.get("default_weight_g", 200)
+            cleaned_desc = _strip_cafe24_boilerplate(raw_txt)
             rows.append(
                 {
                     "brand_id": brand["brand_id"],
@@ -252,7 +262,7 @@ def collect_cafe24_list(brand: dict[str, Any], ts: str) -> list[dict[str, Any]]:
                     "product_url": prod_url,
                     "price_krw": price,
                     "weight_g": weight_g,
-                    "description_raw": raw_txt[:800],
+                    "description_raw": cleaned_desc[:800],
                     "tags_raw": "",
                     "collected_at_utc": ts,
                 }
@@ -279,16 +289,21 @@ def collect_terarosa_list(brand: dict[str, Any], ts: str, max_items: int = 25) -
         price = extract_price(parent_txt)
         weight_g = extract_weight_g(title + " " + parent_txt) or brand.get("default_weight_g", 250)
 
-        # Fetch detail page using ItemCode if needed for tasting notes
-        desc = parent_txt
+        # Fetch detail page using ItemCode and extract ONLY product info block (no nav/search boilerplate)
+        desc = title
         try:
             dr = requests.get(prod_url, headers=HEADERS, timeout=8)
             if dr.status_code == 200:
                 ds = BeautifulSoup(dr.text, "html.parser")
-                dtxt = clean_text(ds.get_text(" ", strip=True))
+                info_el = ds.select_one(".cont_title_info")
+                info_txt = clean_text(info_el.get_text(" ", strip=True)) if info_el else ""
                 if price is None:
-                    price = extract_price(dtxt[:4000])
-                desc = f"{title} {dtxt[:1200]}"
+                    price = extract_price(info_txt or clean_text(ds.get_text(" ", strip=True))[:4000])
+                if weight_g == brand.get("default_weight_g", 250):
+                    w_info = extract_weight_g(info_txt)
+                    if w_info:
+                        weight_g = w_info
+                desc = clean_text(f"{title} {info_txt}") if info_txt else title
         except requests.RequestException:
             pass
 
@@ -338,11 +353,17 @@ def collect_imweb_brand(brand: dict[str, Any], ts: str, max_items: int = 20) -> 
             title = re.sub(r"\s*[-|:]\s*(앤트러사이트|센터커피).*$", "", title).strip() or link_title
             if not title or is_non_bean_item(title):
                 continue
-            og_desc = psoup.find("meta", property="og:description")
-            meta_desc = clean_text(og_desc["content"]) if og_desc and og_desc.get("content") else ""
-            body_text = clean_text(psoup.get_text(" ", strip=True))
-            price = extract_price(body_text[:4000])
-            weight_g = extract_weight_g(title + " " + meta_desc + " " + body_text[:2500]) or brand.get("default_weight_g", 200)
+            # Extract ONLY product-specific summary / detail elements (never site-wide header/nav/og:description)
+            summary_el = psoup.select_one(".goods_summary")
+            summary_txt = clean_text(summary_el.get_text(" ", strip=True)) if summary_el else ""
+            detail_el = psoup.select_one("#prod_detail_body")
+            detail_txt = clean_text(detail_el.get_text(" ", strip=True)) if detail_el else ""
+            shop_content_el = psoup.select_one(".shop-content")
+            shop_txt = clean_text(shop_content_el.get_text(" ", strip=True)) if shop_content_el else ""
+
+            price = extract_price(shop_txt or clean_text(psoup.get_text(" ", strip=True))[:4000])
+            weight_g = extract_weight_g(f"{title} {summary_txt} {detail_txt}") or brand.get("default_weight_g", 200)
+            combined = clean_text(f"{title} {summary_txt} {detail_txt}")
             rows.append(
                 {
                     "brand_id": brand["brand_id"],
@@ -352,7 +373,7 @@ def collect_imweb_brand(brand: dict[str, Any], ts: str, max_items: int = 20) -> 
                     "product_url": url,
                     "price_krw": price,
                     "weight_g": weight_g,
-                    "description_raw": clean_text(f"{meta_desc} {body_text[:1200]}")[:800],
+                    "description_raw": combined[:800],
                     "tags_raw": "",
                     "collected_at_utc": ts,
                 }
