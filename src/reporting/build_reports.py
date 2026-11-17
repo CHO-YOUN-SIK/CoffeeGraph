@@ -51,8 +51,11 @@ def generate_reports() -> list[Path]:
     total_skus = int(brand_sum["sku_count"].sum())
 
     src_reg = pd.read_csv(METADATA_DIR / "source_registry.csv").set_index("dataset_key")
+    def _rows(k: str) -> int:
+        return int(val_res["datasets"][k].get("total_rows") or src_reg.loc[k, "row_count"])
+
     seoul_raw_total = sum(
-        int(val_res["datasets"][k].get("total_rows") or src_reg.loc[k, "row_count"])
+        _rows(k)
         for k in ["seoul_store_district", "seoul_sales_district", "seoul_store_commercial", "seoul_sales_commercial"]
     )
     funnel = cluster_val["selection_funnel"]
@@ -166,7 +169,7 @@ def generate_reports() -> list[Path]:
 
 ## Step 1. 사용한 데이터 및 재현성 범위
 1. **서울 열린데이터광장 공식 원본 (총 {seoul_raw_total:,}행)**:
-   - `OA-22173`(점포-자치구 {val_res['datasets']['seoul_store_district']['total_rows']:,}행), `OA-22176`(추정매출-자치구 {val_res['datasets']['seoul_sales_district']['total_rows']:,}행), `OA-15577`(점포-상권 {val_res['datasets']['seoul_store_commercial']['total_rows']:,}행), `OA-15572`(추정매출-상권 {val_res['datasets']['seoul_sales_commercial']['total_rows']:,}행).
+   - `OA-22173`(점포-자치구 {_rows('seoul_store_district'):,}행), `OA-22176`(추정매출-자치구 {_rows('seoul_sales_district'):,}행), `OA-15577`(점포-상권 {_rows('seoul_store_commercial'):,}행), `OA-15572`(추정매출-상권 {_rows('seoul_sales_commercial'):,}행).
    - 필터 조건: `서비스_업종_코드 == 'CS100010'`(커피-음료). 상권 단위 `20261` 매칭: 점포 상권 {funnel['store_commercial_areas_20261']:,}개 중 매출 제공 상권 **{funnel['sales_commercial_areas_20261']:,}개** 내부 결합(`n=1,064`).
 2. **CQI Coffee Quality Database**: Arabica 1,311건 + Robusta 28건 = **{cqi['total_records']:,}건** 전수 (`VALIDATED`).
 3. **브랜드 공식 온라인몰 원두 SKU**: 총 **{total_brands}개 브랜드**(스페셜티 {specialty_brands}개 + 프랜차이즈 비교군 {franchise_brands}개) 직접 수집 검증 SKU **n={total_skus}**.
