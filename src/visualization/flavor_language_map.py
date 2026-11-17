@@ -124,27 +124,46 @@ def build_interactive_flavor_map() -> Path:
         )
         scatter_traces_meta.append((dom_fam, "scatter"))
 
-    # Visualization B: Heatmap of SKU Mention Rate (%) by Brand x Flavor Family
+    # Visualization B: Heatmap of SKU Mention Rate (%) + (k/n) by Brand x Flavor Family
     fp_sorted = fp.sort_values("mean_sensory_specificity", ascending=True).reset_index(drop=True)
-    y_labels = [
+    y_labels_all = [
         f"{r['brand_id']} (검출 {int(r['flavor_detected_count'])}/{int(r['sku_count'])}, {r['flavor_detected_pct']:.0f}%)"
         for _, r in fp_sorted.iterrows()
     ]
-    z_vals = fp_sorted[[f"sku_pct_{f}" for f in FAMILIES]].to_numpy()
-    text_vals = [[f"{v:.0f}%" for v in row] for row in z_vals]
+    y_labels_wb = [
+        f"{r['brand_id']} (검출 {int(r['wb_detected_count'])}/{int(r['whole_bean_count'])}, {r['wb_detected_pct']:.0f}%)"
+        for _, r in fp_sorted.iterrows()
+    ]
+    z_all = fp_sorted[[f"sku_pct_{f}" for f in FAMILIES]].to_numpy()
+    z_wb = fp_sorted[[f"wb_sku_pct_{f}" for f in FAMILIES]].to_numpy()
+
+    text_all = [
+        [
+            f"{row[f'sku_pct_{f}']:.0f}%<br>({int(row[f'sku_cnt_{f}'])}/{int(row['sku_count'])})"
+            for f in FAMILIES
+        ]
+        for _, row in fp_sorted.iterrows()
+    ]
+    text_wb = [
+        [
+            f"{row[f'wb_sku_pct_{f}']:.0f}%<br>({int(row[f'wb_sku_cnt_{f}'])}/{int(row['whole_bean_count'])})"
+            for f in FAMILIES
+        ]
+        for _, row in fp_sorted.iterrows()
+    ]
 
     fig.add_trace(
         go.Heatmap(
-            z=z_vals,
+            z=z_all,
             x=FAMILIES,
-            y=y_labels,
-            text=text_vals,
+            y=y_labels_all,
+            text=text_all,
             texttemplate="%{text}",
             colorscale="YlGnBu",
             zmin=0,
             zmax=100,
             colorbar=dict(title="언급 SKU %", len=0.85, x=1.02),
-            hovertemplate="브랜드: %{y}<br>계열: %{x}<br>언급 SKU 비율: %{z:.1f}%<extra></extra>",
+            hovertemplate="브랜드: %{y}<br>계열: %{x}<br>언급률: %{text}<extra></extra>",
             showscale=True,
         ),
         row=1,
@@ -162,12 +181,9 @@ def build_interactive_flavor_map() -> Path:
         font=dict(size=10, color="#555555"),
     )
 
-    # Interactive Product-Type Filter (All 129 SKUs vs Whole Bean Only)
+    # Interactive Product-Type Filter updating BOTH Panel A (scatter) and Panel B (heatmap)
     n_scatter = len(scatter_traces_meta)
-    all_x = []
-    all_y = []
-    wb_x = []
-    wb_y = []
+    all_x, all_y, wb_x, wb_y = [], [], [], []
     for dom_fam, _ in scatter_traces_meta:
         sub_all = df[df["dominant_flavor_family"] == dom_fam]
         sub_wb = sub_all[sub_all["product_type_std"] == "whole_bean"]
@@ -176,17 +192,33 @@ def build_interactive_flavor_map() -> Path:
         wb_x.append(sub_wb["x_jit"].tolist())
         wb_y.append(sub_wb["y_jit"].tolist())
 
-    scatter_indices = list(range(n_scatter))
+    heatmap_idx = n_scatter
     buttons = [
         dict(
-            label="전체 SKU (n=129)",
-            method="restyle",
-            args=[{"x": all_x, "y": all_y}, scatter_indices],
+            label="전체 SKU (n=129, A+B 동시 반영)",
+            method="update",
+            args=[
+                {
+                    "x": all_x + [FAMILIES],
+                    "y": all_y + [y_labels_all],
+                    "z": [None] * n_scatter + [z_all.tolist()],
+                    "text": [None] * n_scatter + [text_all],
+                },
+                {},
+            ],
         ),
         dict(
-            label="일반 원두만 (whole_bean, n=98)",
-            method="restyle",
-            args=[{"x": wb_x, "y": wb_y}, scatter_indices],
+            label="일반 원두만 (whole_bean, n=98, A+B 동시 반영)",
+            method="update",
+            args=[
+                {
+                    "x": wb_x + [FAMILIES],
+                    "y": wb_y + [y_labels_wb],
+                    "z": [None] * n_scatter + [z_wb.tolist()],
+                    "text": [None] * n_scatter + [text_wb],
+                },
+                {},
+            ],
         ),
     ]
 
@@ -277,10 +309,13 @@ def build_static_flavor_map() -> Path:
     ax2.set_xlabel("SCA/WCR 향미 계열 (복수 언급 허용, 합계 ≠ 100%)")
 
     for i in range(mat.shape[0]):
-        for j in range(mat.shape[1]):
+        row_s = fp_sorted.iloc[i]
+        n_tot = int(row_s["sku_count"])
+        for j, fam in enumerate(FAMILIES):
             val = mat[i, j]
+            cnt = int(row_s[f"sku_cnt_{fam}"])
             txt_color = "white" if val >= 55 else "#111111"
-            ax2.text(j, i, f"{val:.0f}%", ha="center", va="center", color=txt_color, fontsize=8)
+            ax2.text(j, i, f"{val:.0f}%\n({cnt}/{n_tot})", ha="center", va="center", color=txt_color, fontsize=7.5)
 
     cbar = fig.colorbar(im, ax=ax2, fraction=0.046, pad=0.04)
     cbar.set_label("언급 SKU %", fontsize=9)

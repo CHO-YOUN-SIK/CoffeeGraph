@@ -1,0 +1,155 @@
+﻿flavor_family,tier,term,lang,wcr_reference_category,wcr_reference_attributes,korean_disambiguation_rule
+Berry,broad,베리류,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,broad,베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,broad,berry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,스트로베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,블루베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,라즈베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,크랜베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,블랙베리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,딸기,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,체리,ko,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,strawberry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,blueberry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,raspberry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,blackberry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,cranberry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Berry,anchor,cherry,en,Fruity > Berry,"Blackberry, Raspberry, Blueberry, Strawberry, Cherry",Standard berry/cherry terms; no Korean homograph collision.
+Citrus,broad,시트러스,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,broad,감귤류,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,broad,citrus,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,블러드오렌지,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,만다린,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,오렌지,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,감귤,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,자몽,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,레몬,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,라임,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,유자,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,귤,ko,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,grapefruit,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,mandarin,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,orange,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,lemon,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,lime,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Citrus,anchor,yuzu,en,Fruity > Citrus Fruit,"Grapefruit, Orange, Lemon, Lime",Single-syllable '귤' guarded with Korean boundary regex.
+Stone/Other Fruit,broad,열대과일,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,broad,과일향,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,broad,과일,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,broad,fruity,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,broad,fruit,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,broad,tropical,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,패션프루트,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,청포도,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,청사과,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,파인애플,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,복숭아,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,무화과,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,건과일,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,황도,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,백도,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,살구,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,자두,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,사과,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,포도,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,망고,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,석류,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,멜론,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,배,ko,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,dried fruit,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,pineapple,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,apricot,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,peach,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,apple,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,grape,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,mango,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,plum,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,fig,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Stone/Other Fruit,anchor,pear,en,Fruity > Other Fruit / Dried Fruit,"Apple, Pear, Peach, Grape, Pineapple, Raisin, Prune, Fig",'배' strictly guarded to exclude 배송/배전/중약배전/예배/배운/재배; '청포도' consumes span before '포도'.
+Floral,broad,플로럴,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,broad,꽃향,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,broad,꽃,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,broad,floral,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,오렌지블라썸,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,엘더플라워,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,히비스커스,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,캐모마일,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,베르가못,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,아카시아,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,라벤더,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,자스민,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,재스민,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,장미,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,로즈,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,허브,ko,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,chamomile,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,bergamot,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,lavender,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,jasmine,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,blossom,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Floral,anchor,rose,en,Floral,"Floral, Jasmine, Rose, Chamomile",'꽃' guarded with Korean boundary; bergamot grouped under Floral/citrus-aromatic.
+Nutty,broad,견과류,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,broad,견과,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,broad,너티,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,broad,고소,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,broad,nutty,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,broad,nut,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,마카다미아,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,피스타치오,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,헤이즐넛,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,캐슈넛,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,아몬드,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,호두,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,땅콩,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,피칸,ko,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,hazelnut,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,almond,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,walnut,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,peanut,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,cashew,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Nutty,anchor,pecan,en,Nutty/Cocoa > Nutty,"Almond, Hazelnut, Peanuts",'고소' guarded to match adjectival/nominal forms (고소한/고소함) only.
+Chocolate/Cocoa,broad,초콜릿,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,카카오,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,코코아,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,초코,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,chocolate,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,cacao,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,broad,cocoa,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,다크초콜릿,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,밀크초콜릿,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,화이트초콜릿,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,카카오닙스,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,가나슈,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,모카,ko,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,dark chocolate,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,milk chocolate,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,white chocolate,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,ganache,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Chocolate/Cocoa,anchor,mocha,en,Nutty/Cocoa > Cocoa,"Cocoa, Dark Chocolate",'모카' strictly excludes '모카포트'; '다크초콜릿' consumes span before '초콜릿'.
+Sweet/Caramel,broad,단맛,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,broad,달콤,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,broad,스윗,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,broad,sweetness,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,broad,sweet,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,버터스카치,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,브라운슈가,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,슈거시럽,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,사탕수수,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,마시멜로,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,흑설탕,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,카라멜,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,캐러멜,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,메이플,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,달고나,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,바닐라,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,토피,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,당밀,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,허니,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,꿀,ko,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,brown sugar,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,molasses,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,caramel,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,vanilla,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,toffee,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,maple,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.
+Sweet/Caramel,anchor,honey,en,Sweet,"Brown Sugar, Molasses, Maple Syrup, Caramelized, Honey, Vanilla, Sweet Aromatics",'꿀' guarded with Korean boundary regex.

@@ -59,3 +59,36 @@ datasets:
     encoding: "utf-8"
     raw_path: "data/raw/cqi/robusta_data_cleaned.csv"
     license: "Public / GitHub jldbc/coffee-quality-database"
+  seoul_work_pop_commercial:
+    id: OA-15569
+    name: "서울시 상권분석서비스(직장인구-상권)"
+    api_service: VwsmTrdarWrcPopltnW
+    source_url: "https://data.seoul.go.kr/dataList/OA-15569/S/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-15569_work_pop_commercial.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  seoul_foot_pop_commercial:
+    id: OA-15568
+    name: "서울시 상권분석서비스(길단위인구-상권)"
+    api_service: VwsmTrdarFlpopW
+    source_url: "https://data.seoul.go.kr/dataList/OA-15568/S/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-15568_foot_pop_commercial.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"
+  seoul_res_pop_commercial:
+    id: OA-15584
+    name: "서울시 상권분석서비스(상주인구-상권)"
+    api_service: VwsmTrdarRepopW
+    source_url: "https://data.seoul.go.kr/dataList/OA-15584/S/1/datasetView.do"
+    download_url: "https://datafile.seoul.go.kr/bigfile/iot/sheet/csv/download.do"
+    srv_type: "S"
+    service_kind: "1"
+    encoding: "cp949"
+    raw_path: "data/raw/seoul/OA-15584_res_pop_commercial.csv"
+    license: "공공누리(KOGL) / 서울 열린데이터광장 이용약관"

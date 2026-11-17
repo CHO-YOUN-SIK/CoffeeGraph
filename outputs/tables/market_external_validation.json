@@ -1,0 +1,110 @@
+{
+  "matched_1064_coverage": {
+    "work_pop_matched": 1062,
+    "foot_pop_matched": 1063,
+    "res_pop_matched": 1059
+  },
+  "selection_bias_455_excluded": {
+    "전체_점포_수": {
+      "included_n": 1064,
+      "included_median": 10.0,
+      "excluded_n": 455,
+      "excluded_median": 2.0,
+      "mannwhitney_p": 0.0
+    },
+    "총_직장_인구_수": {
+      "included_n": 1062,
+      "included_median": 745.5,
+      "excluded_n": 451,
+      "excluded_median": 233.0,
+      "mannwhitney_p": 0.0
+    },
+    "총_유동인구_수": {
+      "included_n": 1063,
+      "included_median": 782241.0,
+      "excluded_n": 455,
+      "excluded_median": 265431.0,
+      "mannwhitney_p": 0.0
+    },
+    "총_상주인구_수": {
+      "included_n": 1059,
+      "included_median": 2190.0,
+      "excluded_n": 449,
+      "excluded_median": 967.0,
+      "mannwhitney_p": 0.0
+    }
+  },
+  "h_m1_office_lunch_vs_work_pop": {
+    "n": 1062,
+    "spearman_rho": 0.1857,
+    "spearman_p": 0.0,
+    "pearson_r_log10": 0.1697,
+    "pearson_p": 0.0,
+    "cluster_kruskal_h": 75.304,
+    "cluster_kruskal_p": 0.0,
+    "highest_median_work_pop_cluster": "오피스·점심 집중형"
+  },
+  "h_m2_evening_life_vs_resident_pop": {
+    "n": 1059,
+    "spearman_rho": 0.1208,
+    "spearman_p": 8.1e-05,
+    "pearson_r_log10": 0.0832,
+    "pearson_p": 0.006778,
+    "cluster_kruskal_h": 19.874,
+    "cluster_kruskal_p": 0.00018,
+    "highest_median_res_pop_cluster": "주말·방문형"
+  },
+  "h_m3_weekend_sales_vs_foot_traffic": {
+    "n": 1063,
+    "spearman_rho": 0.4935,
+    "spearman_p": 0.0,
+    "pearson_r": 0.4589,
+    "pearson_p": 0.0
+  },
+  "cluster_external_profiles": [
+    {
+      "cluster_label": "모닝·복합형",
+      "n_areas": 484,
+      "median_work_pop": 602.0,
+      "median_foot_pop": 753788.5,
+      "median_res_pop": 2359.0,
+      "mean_lunch_sales_pct": 34.62,
+      "mean_evening_sales_pct": 19.38,
+      "mean_weekend_sales_pct": 32.98,
+      "mean_weekend_foot_pct": 29.04
+    },
+    {
+      "cluster_label": "오피스·점심 집중형",
+      "n_areas": 275,
+      "median_work_pop": 1562.0,
+      "median_foot_pop": 640952.0,
+      "median_res_pop": 1624.0,
+      "mean_lunch_sales_pct": 48.28,
+      "mean_evening_sales_pct": 9.34,
+      "mean_weekend_sales_pct": 16.57,
+      "mean_weekend_foot_pct": 25.33
+    },
+    {
+      "cluster_label": "저녁·생활형",
+      "n_areas": 36,
+      "median_work_pop": 488.0,
+      "median_foot_pop": 784934.5,
+      "median_res_pop": 2348.5,
+      "mean_lunch_sales_pct": 14.64,
+      "mean_evening_sales_pct": 29.58,
+      "mean_weekend_sales_pct": 32.16,
+      "mean_weekend_foot_pct": 28.58
+    },
+    {
+      "cluster_label": "주말·방문형",
+      "n_areas": 269,
+      "median_work_pop": 636.0,
+      "median_foot_pop": 945731.0,
+      "median_res_pop": 2402.0,
+      "mean_lunch_sales_pct": 28.72,
+      "mean_evening_sales_pct": 26.94,
+      "mean_weekend_sales_pct": 35.42,
+      "mean_weekend_foot_pct": 28.69
+    }
+  ]
+}

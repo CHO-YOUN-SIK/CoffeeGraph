@@ -21,66 +21,22 @@ import pandas as pd
 import statsmodels.formula.api as smf
 from scipy import stats
 
+from src.analysis.lexicon_validation import (
+    WCR_FAMILY_MAPPING_RULES,
+    audit_center_coffee_zero_detection,
+    export_wcr_lexicon_mapping,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 RAW_BEANS_PATH = ROOT / "data" / "raw" / "brands" / "official_brand_beans_raw.csv"
 RAW_BRAND_REG_PATH = ROOT / "data" / "raw" / "brands" / "official_brand_registry.csv"
 PROCESSED_DIR = ROOT / "data" / "processed" / "brands"
 OUT_DIR = ROOT / "outputs" / "tables"
 
-# SCA/WCR-inspired hierarchical lexicon: Family -> (Broad terms, Specific anchors)
+# Build FLAVOR_HIERARCHY from documented researcher-defined WCR mapping rules
 FLAVOR_HIERARCHY: dict[str, dict[str, list[str]]] = {
-    "Berry": {
-        "broad": ["베리류", "베리", "berry"],
-        "anchors": [
-            "스트로베리", "블루베리", "라즈베리", "크랜베리", "블랙베리", "딸기", "체리",
-            "strawberry", "blueberry", "raspberry", "blackberry", "cranberry", "cherry",
-        ],
-    },
-    "Citrus": {
-        "broad": ["시트러스", "감귤류", "citrus"],
-        "anchors": [
-            "블러드오렌지", "만다린", "오렌지", "감귤", "자몽", "레몬", "라임", "유자", "귤",
-            "grapefruit", "mandarin", "orange", "lemon", "lime", "yuzu",
-        ],
-    },
-    "Stone/Other Fruit": {
-        "broad": ["열대과일", "과일향", "과일", "fruity", "fruit", "tropical"],
-        "anchors": [
-            "패션프루트", "청포도", "청사과", "파인애플", "복숭아", "무화과", "건과일",
-            "황도", "백도", "살구", "자두", "사과", "포도", "망고", "석류", "멜론", "배",
-            "dried fruit", "pineapple", "apricot", "peach", "apple", "grape", "mango", "plum", "fig", "pear",
-        ],
-    },
-    "Floral": {
-        "broad": ["플로럴", "꽃향", "꽃", "floral"],
-        "anchors": [
-            "오렌지블라썸", "엘더플라워", "히비스커스", "캐모마일", "베르가못", "아카시아",
-            "라벤더", "자스민", "재스민", "장미", "로즈", "허브",
-            "chamomile", "bergamot", "lavender", "jasmine", "blossom", "rose",
-        ],
-    },
-    "Nutty": {
-        "broad": ["견과류", "견과", "너티", "고소", "nutty", "nut"],
-        "anchors": [
-            "마카다미아", "피스타치오", "헤이즐넛", "캐슈넛", "아몬드", "호두", "땅콩", "피칸",
-            "hazelnut", "almond", "walnut", "peanut", "cashew", "pecan",
-        ],
-    },
-    "Chocolate/Cocoa": {
-        "broad": ["초콜릿", "카카오", "코코아", "초코", "chocolate", "cacao", "cocoa"],
-        "anchors": [
-            "다크초콜릿", "밀크초콜릿", "화이트초콜릿", "카카오닙스", "가나슈", "모카",
-            "dark chocolate", "milk chocolate", "white chocolate", "ganache", "mocha",
-        ],
-    },
-    "Sweet/Caramel": {
-        "broad": ["단맛", "달콤", "스윗", "sweetness", "sweet"],
-        "anchors": [
-            "버터스카치", "브라운슈가", "슈거시럽", "사탕수수", "마시멜로", "흑설탕",
-            "카라멜", "캐러멜", "메이플", "달고나", "바닐라", "토피", "당밀", "허니", "꿀",
-            "brown sugar", "molasses", "caramel", "vanilla", "toffee", "maple", "honey",
-        ],
-    },
+    fam: {"broad": spec["broad"], "anchors": spec["anchors"]}
+    for fam, spec in WCR_FAMILY_MAPPING_RULES.items()
 }
 
 NARRATIVE_ABSTRACT_TERMS: list[str] = [
@@ -227,15 +183,18 @@ def extract_sku_features(row: pd.Series) -> dict[str, Any]:
         top_fams = [f for f, c in family_counts.items() if c == max_hits]
         dominant_family = top_fams[0] if len(top_fams) == 1 else "Multi-Family (Tie)"
 
-    # Clean Sensory Specificity (separated from broad-word repetition)
+    # Clean Sensory Specificity: pure level (0/1/2) separated from anchor count
     if anchor_count > 0:
         specificity_tier = "Specific-Anchored"
+        specificity_level = 2
         sensory_specificity = float(anchor_count)
     elif broad_count > 0:
         specificity_tier = "Broad-Only"
+        specificity_level = 1
         sensory_specificity = 0.5
     else:
         specificity_tier = "None-Stated"
+        specificity_level = 0
         sensory_specificity = 0.0
 
     # Narrative Density: total occurrences of narrative/abstract terms per 100 chars
@@ -265,6 +224,7 @@ def extract_sku_features(row: pd.Series) -> dict[str, Any]:
         "total_flavor_mentions": int(total_mentions),
         "broad_term_count": int(broad_count),
         "specific_anchor_count": int(anchor_count),
+        "specificity_level": int(specificity_level),
         "sensory_specificity": sensory_specificity,
         "specificity_tier": specificity_tier,
         "narrative_count": int(narrative_count),
@@ -368,6 +328,15 @@ def _run_population_stats(df: pd.DataFrame, families: list[str]) -> dict[str, An
         "sensory_specificity ~ narrative_density + text_length + is_single_origin + C(brand_id)",
         data=df,
     ).fit()
+    nar_beta = float(ols_brand.params["narrative_density"])
+    nar_se = float(ols_brand.bse["narrative_density"])
+    nar_ci = ols_brand.conf_int().loc["narrative_density"]
+    df_resid = int(ols_brand.df_resid)
+    # TOST equivalence test with margin delta = +/- 0.5 anchors per 1.0 narrative density unit
+    delta = 0.5
+    t_lower = (nar_beta - (-delta)) / nar_se if nar_se > 0 else 0.0
+    t_upper = (delta - nar_beta) / nar_se if nar_se > 0 else 0.0
+    p_tost = float(max(stats.t.sf(t_lower, df_resid), stats.t.sf(t_upper, df_resid)))
 
     return {
         "n_skus": int(len(df)),
@@ -388,8 +357,11 @@ def _run_population_stats(df: pd.DataFrame, families: list[str]) -> dict[str, An
             "ols_single_origin_coef": round(float(ols_simple.params["is_single_origin"]), 4),
             "ols_single_origin_p": round(float(ols_simple.pvalues["is_single_origin"]), 6),
             "ols_brand_fe_r2": round(float(ols_brand.rsquared), 4),
-            "ols_brand_fe_narrative_coef": round(float(ols_brand.params["narrative_density"]), 4),
+            "ols_brand_fe_narrative_coef": round(nar_beta, 4),
+            "ols_brand_fe_narrative_ci95": [round(float(nar_ci[0]), 4), round(float(nar_ci[1]), 4)],
             "ols_brand_fe_narrative_p": round(float(ols_brand.pvalues["narrative_density"]), 6),
+            "ols_brand_fe_narrative_tost_delta": delta,
+            "ols_brand_fe_narrative_tost_p": round(p_tost, 6),
             "ols_brand_fe_single_origin_coef": round(float(ols_brand.params["is_single_origin"]), 4),
             "ols_brand_fe_single_origin_p": round(float(ols_brand.pvalues["is_single_origin"]), 6),
         },
@@ -415,6 +387,9 @@ def analyze_flavor_language() -> dict[str, Any]:
     coded = coded.merge(reg[["brand_id", "brand_segment"]], on="brand_id", how="left")
     coded.to_csv(PROCESSED_DIR / "sku_flavor_language_coded.csv", index=False, encoding="utf-8-sig")
 
+    export_wcr_lexicon_mapping()
+    center_audit = audit_center_coffee_zero_detection()
+
     families = list(FLAVOR_HIERARCHY.keys())
     # Brand-level Fingerprint using SKU Mention Rate (%) + Detection Rate (%)
     fp_rows = []
@@ -422,6 +397,7 @@ def analyze_flavor_language() -> dict[str, Any]:
         n_skus = len(grp)
         wb_grp = grp[grp["is_comparable_whole_bean"] == 1]
         detected_n = int((grp["specificity_tier"] != "None-Stated").sum())
+        wb_detected_n = int((wb_grp["specificity_tier"] != "None-Stated").sum())
         row_d: dict[str, Any] = {
             "brand_id": bid,
             "brand_name": bname,
@@ -430,6 +406,8 @@ def analyze_flavor_language() -> dict[str, Any]:
             "whole_bean_count": int(len(wb_grp)),
             "flavor_detected_count": detected_n,
             "flavor_detected_pct": round(detected_n / n_skus * 100, 1) if n_skus else 0.0,
+            "wb_detected_count": wb_detected_n,
+            "wb_detected_pct": round(wb_detected_n / len(wb_grp) * 100, 1) if len(wb_grp) else 0.0,
             "median_whole_bean_price_per_100g": round(float(wb_grp["price_per_100g"].median()), 0)
             if wb_grp["price_per_100g"].notna().any()
             else np.nan,
@@ -440,7 +418,9 @@ def analyze_flavor_language() -> dict[str, Any]:
         }
         for f in families:
             row_d[f"sku_pct_{f}"] = round(float(grp[f"fam_{f}_has"].mean() * 100), 1)
+            row_d[f"sku_cnt_{f}"] = int(grp[f"fam_{f}_has"].sum())
             row_d[f"wb_sku_pct_{f}"] = round(float(wb_grp[f"fam_{f}_has"].mean() * 100), 1) if len(wb_grp) else 0.0
+            row_d[f"wb_sku_cnt_{f}"] = int(wb_grp[f"fam_{f}_has"].sum()) if len(wb_grp) else 0
         fp_rows.append(row_d)
 
     fp_df = pd.DataFrame(fp_rows).sort_values("mean_sensory_specificity", ascending=False).reset_index(drop=True)
@@ -455,6 +435,7 @@ def analyze_flavor_language() -> dict[str, Any]:
         "comparable_whole_bean_skus": int(len(wb_only)),
         "brand_count": int(coded["brand_id"].nunique()),
         "product_type_counts": coded["product_type_std"].value_counts().to_dict(),
+        "center_coffee_audit": center_audit,
         "all_skus": _run_population_stats(coded, families),
         "whole_bean_only": _run_population_stats(wb_only, families),
         "top_cooccurrences": cooc_df.head(5).to_dict(orient="records"),

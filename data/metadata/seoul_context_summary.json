@@ -1,0 +1,25 @@
+{
+  "quarter": "20261",
+  "output_csv": "data/processed/seoul/commercial_context_20261.csv",
+  "commercial_areas_total": 1650,
+  "work_pop_areas": 1641,
+  "foot_pop_areas": 1649,
+  "res_pop_areas": 1633,
+  "cadence_audit": {
+    "work_pop_20261_vs_20251": {
+      "compared": 1641,
+      "identical_count": 1641,
+      "identical_pct": 100.0
+    },
+    "foot_pop_20261_vs_20251": {
+      "compared": 1649,
+      "identical_count": 0,
+      "identical_pct": 0.0
+    },
+    "res_pop_20261_vs_20251": {
+      "compared": 1633,
+      "identical_count": 1633,
+      "identical_pct": 100.0
+    }
+  }
+}

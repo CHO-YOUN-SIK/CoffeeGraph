@@ -9,6 +9,13 @@
     "set_kit": 5,
     "capsule": 5
   },
+  "center_coffee_audit": {
+    "brand_id": "center_coffee",
+    "sku_count": 7,
+    "all_descriptions_metadata_only": false,
+    "finding": "Center Coffee Imweb product pages provide origin/capacity/brew-type metadata (.goods_summary) in HTML text without text tasting notes (extended info is absent or in product images).",
+    "sample_description": "Ecuador Finca Soledad Sidra Wave XT 에콰도르 핀카 솔레다드 시드라 웨이브 XT For Filter 필터커피 용 Capacity 105g Whole Bean 홀빈(갈지않은 원두)"
+  },
   "all_skus": {
     "n_skus": 129,
     "specificity_tier_counts": {
@@ -63,7 +70,13 @@
       "ols_single_origin_p": 0.0,
       "ols_brand_fe_r2": 0.4963,
       "ols_brand_fe_narrative_coef": 0.0529,
+      "ols_brand_fe_narrative_ci95": [
+        -0.2657,
+        0.3716
+      ],
       "ols_brand_fe_narrative_p": 0.742811,
+      "ols_brand_fe_narrative_tost_delta": 0.5,
+      "ols_brand_fe_narrative_tost_p": 0.003181,
       "ols_brand_fe_single_origin_coef": 1.2216,
       "ols_brand_fe_single_origin_p": 0.0
     }
@@ -122,7 +135,13 @@
       "ols_single_origin_p": 0.0,
       "ols_brand_fe_r2": 0.4913,
       "ols_brand_fe_narrative_coef": 0.0124,
+      "ols_brand_fe_narrative_ci95": [
+        -0.4291,
+        0.4538
+      ],
       "ols_brand_fe_narrative_p": 0.955767,
+      "ols_brand_fe_narrative_tost_delta": 0.5,
+      "ols_brand_fe_narrative_tost_p": 0.015383,
       "ols_brand_fe_single_origin_coef": 1.1521,
       "ols_brand_fe_single_origin_p": 1.8e-05
     }

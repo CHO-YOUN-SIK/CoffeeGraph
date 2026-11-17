@@ -115,6 +115,32 @@ def generate_reports() -> list[Path]:
 
 ![상권 소비 맥락 군집](../figures/fig03_commercial_context_clusters.png)
 """
+
+    ext_val_path = TABLES_DIR / "market_external_validation.json"
+    ext_prof_path = TABLES_DIR / "cluster_external_profile_20261.csv"
+    ext_section = ""
+    if ext_val_path.exists() and ext_prof_path.exists():
+        ext_val = json.loads(ext_val_path.read_text(encoding="utf-8"))
+        ext_prof = pd.read_csv(ext_prof_path)
+        hm1 = ext_val["h_m1_office_lunch_vs_work_pop"]
+        hm2 = ext_val["h_m2_evening_life_vs_resident_pop"]
+        hm3 = ext_val["h_m3_weekend_sales_vs_foot_traffic"]
+        sb = ext_val["selection_bias_455_excluded"]
+        ext_section = f"""
+## 4. 외부 인구 데이터 기반 상권 군집 타당성 검증 (`OA-15569`, `OA-15568`, `OA-15584`)
+- **갱신 주기 주의사항**: `OA-15569`(직장인구)와 `OA-15584`(상주인구)는 `20261`과 `20251` 값이 **100.0% 동일**해 연 1회 갱신 지표이므로 다분기 독립 관측치로 해석할 수 없다(`OA-15568` 길단위인구는 분기별 변동 0.0% 동일).
+- **제외된 455개 점포 전용 상권 선택 편향 점검**: 매출 매칭에서 제외된 455개 상권은 포함된 1,064개 상권 대비 점포 수 중앙값(**{sb['전체_점포_수']['excluded_median']}개** vs **{sb['전체_점포_수']['included_median']}개**), 직장인구(**{sb['총_직장_인구_수']['excluded_median']:,.0f}명** vs **{sb['총_직장_인구_수']['included_median']:,.0f}명**), 유동인구(**{sb['총_유동인구_수']['excluded_median']:,.0f}명** vs **{sb['총_유동인구_수']['included_median']:,.0f}명**) 모두 유의하게 작다(Mann-Whitney $p < 0.0001$). 따라서 본 군집 분석은 **다점포 활성 상권(1,064개)**에 적용된다.
+- **H-M1 (`오피스·점심 집중형` 외적 타당성)**: 11–14시 매출 비중과 직장인구는 유의한 양의 상관을 보였으며(Spearman $\\rho = {hm1['spearman_rho']}$, $p < 0.0001$; Kruskal-Wallis $H = {hm1['cluster_kruskal_h']}$, $p < 0.0001$), 실제 직장인구 중앙값 최고 군집도 **`{hm1['highest_median_work_pop_cluster']}`**(**1,562명** vs 타 군집 488~636명)로 명칭의 타당성이 검증되었다.
+- **H-M2 (`저녁·생활형` 외적 타당성)**: 17–21시 매출 비중과 상주인구의 상관은 약한 수준이며(Spearman $\\rho = {hm2['spearman_rho']}$, $p = {hm2['spearman_p']}$), 상주인구 중앙값 최고 군집은 **`{hm2['highest_median_res_pop_cluster']}`**(2,402명)로 `저녁·생활형`(2,348.5명)과 큰 차이가 없었다. 즉, `저녁·생활형`은 순수 주거 밀집보다 **낮은 직장인구(488명)와 저녁 소비 집중**의 결합(`저녁 집중·비오피스형`)으로 해석하는 것이 정확하다.
+- **H-M3 (주말 매출 vs 주말 유동인구)**: Spearman $\\rho = {hm3['spearman_rho']}$ ($p < 0.0001$)로 방문 맥락과 실제 유동인구 구조가 강하게 일치했다.
+
+### 군집별 외부 인구 프로파일 (`20261`)
+{ext_prof.to_markdown(index=False)}
+
+![상권 군집 외부 타당성 검증](../figures/fig06_market_context_validation.png)
+"""
+
+    report_a = report_a + ext_section
     (REPORTS_DIR / "A_Market_Structure_Report.md").write_text(report_a, encoding="utf-8")
 
     # --- Report B: CQI Quality Report ---

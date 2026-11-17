@@ -45,6 +45,9 @@ Thumbs.db
 # Jupyter
 .ipynb_checkpoints/
 
-# Large raw commercial-area CSVs (>40MB; re-downloadable via collect_seoul.yml)
+# Large raw commercial-area CSVs (>40MB; re-downloadable via collect_seoul.yml / seoul_context.py)
 data/raw/seoul/OA-15577_store_commercial.csv
 data/raw/seoul/OA-15572_sales_commercial.csv
+data/raw/seoul/OA-15569_work_pop_commercial.csv
+data/raw/seoul/OA-15568_foot_pop_commercial.csv
+data/raw/seoul/OA-15584_res_pop_commercial.csv
