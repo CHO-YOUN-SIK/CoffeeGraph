@@ -1,0 +1,8 @@
+﻿brand_id,brand_name,official_url,catalog_url,seoul_districts,primary_context,platform,operational_status,ux_notes
+blue_bottle_kr,블루보틀 코리아 (Blue Bottle Korea),https://kr.bluebottlecoffee.com,https://kr.bluebottlecoffee.com/products.json?limit=250,"성동구,종로구,강남구,용산구,영등포구",주말·방문형 / 오피스·복합형,shopify,ACTIVE_VERIFIED,"블렌드/싱글오리진 분류, 로스트·향미·산미 필터 및 브루잉 가이드 제공"
+fritz,프릳츠 커피 컴퍼니 (Fritz),https://fritz.co.kr,https://fritz.co.kr/product/list.html?cate_no=24,"마포구,종로구,서초구",주말·방문형 / 모닝·복합형,cafe24,ACTIVE_VERIFIED,원두 상세 내 컵노트·산지·가공법·배전도 서술 및 캐릭터 브랜딩 중심
+anthracite,앤트러사이트 (Anthracite),https://www.anthracitecoffee.com,https://www.anthracitecoffee.com/shop,"마포구,용산구,서대문구",주말·방문형 / 감성·복합형,imweb,ACTIVE_VERIFIED,"문학적·감성적 제품명(공기와 꿈, 나쓰메 소세키 등)과 공간 서사 결합"
+center_coffee,센터커피 (Center Coffee),https://centercoffee.co.kr,https://centercoffee.co.kr/shop,"성동구,강남구,중구",오피스·점심 집중형 / 주말·방문형,imweb,ACTIVE_VERIFIED,산지·품종·가공법·커핑 노트 중심의 스페셜티 스펙 제시
+coffee_libre,커피리브레 (Coffee Libre),https://www.coffeelibre.kr,https://www.coffeelibre.kr/product/list.html?cate_no=48,"마포구,영등포구,중구",오피스·점심 집중형 / 주말·방문형,cafe24,ACTIVE_VERIFIED,싱글오리진·블렌드·디카페인 세분화 및 농장·가공법 정보 상세 제공
+felt_coffee,펠트커피 (FELT Coffee),https://feltcoffee.com,https://feltcoffee.com/category/shop/30/,"종로구,강남구,서대문구",오피스·점심 집중형 / 모닝·복합형,cafe24,ACTIVE_VERIFIED,게이샤·마이크로랏 등 하이엔드 싱글오리진 및 간결한 테이스팅 노트
+terarosa,테라로사 (Terarosa),https://www.terarosa.com,https://www.terarosa.com/product/list/?category=79,"종로구,강남구,서초구",오피스·점심 집중형 / 복합형,terarosa,ACTIVE_VERIFIED,산지·가공·향미 노트 및 추출 레시피 기반 탐색 구조

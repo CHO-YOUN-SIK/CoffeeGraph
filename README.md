@@ -13,10 +13,10 @@ GitHub Cloud 기반 데이터 리서치 & BX/CX 전략 분석 프로젝트
 | M2. Data Validation | **VALIDATED** | 전수 스키마·결측·중복·산술 정합성 검증 통과 (`data/metadata/validation_results.json`, `tests/test_data_validation.py`) |
 | M3. Seoul Market Analysis | **COMPLETED** | 자치구(25개)·상권(1,064개 매칭) 시장 구조·소비 맥락·군집 분석 및 기존 지표 재현 검증 완료 (`src/analysis/market_structure.py`, `consumer_context.py`) |
 | M4. CQI Analysis | **COMPLETED** | CQI 1,339건 전수 분석, 산지·수확시기 통제 OLS 및 표본 편향 진단 완료 (`src/analysis/cqi_quality.py`) |
-| M5. Brand Research | **NOT_STARTED** | `src/collectors/brand_collector.py` |
-| M6. Cross Analysis | **NOT_STARTED** | `src/analysis/cross_analysis.py` |
-| M7. Insights & Hypotheses | **NOT_STARTED** | `research/insights/`, `research/hypotheses/` |
-| M8. Final Report | **NOT_STARTED** | `outputs/reports/` |
+| M5. Brand Research | **COMPLETED** | 서울 7개 스페셜티 브랜드 공식몰 원두 SKU 직접 수집·검증 및 9차원 향미 코드북 분석 (`src/collectors/brand_collector.py`, `src/analysis/brand_positioning.py`) |
+| M6. Cross Analysis | **COMPLETED** | 4단계 결합 수준(Direct/Context/Comparative/Reference) 교차 분석 (`src/analysis/cross_analysis.py`) |
+| M7. Insights & Hypotheses | **COMPLETED** | 근거 추적표(`research/evidence/evidence_ledger.csv`) 및 반증 가능한 BX/CX 가설 도출 |
+| M8. Final Report | **COMPLETED** | 한국어 분석 보고서 4종(`outputs/reports/A~D`) 및 시각화 차트 4종 생성 완료 |
 
 ## 3. 수집 및 검증된 공식 데이터 현황
 

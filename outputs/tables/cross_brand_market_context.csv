@@ -1,0 +1,8 @@
+﻿brand_id,brand_name,matched_seoul_districts,district_count,avg_district_sales_per_store_eok,avg_district_store_change_pct,avg_district_lunch_11_14_pct,avg_district_weekend_pct,sku_count,median_price_per_100g,single_origin_share_pct,mean_sensory_dims,pct_감성적·추상적,pct_과일,pct_산미,pct_초콜릿
+anthracite,앤트러사이트 (Anthracite),"마포구,용산구,서대문구",3,0.216,-3.6,32.97,31.13,17,8500.0,41.2,0.71,35.3,5.9,0.0,17.6
+blue_bottle_kr,블루보틀 코리아 (Blue Bottle Korea),"성동구,종로구,강남구,용산구,영등포구",5,0.307,-1.55,38.1,25.7,29,17500.0,20.7,1.86,75.9,31.0,24.1,27.6
+center_coffee,센터커피 (Center Coffee),"성동구,강남구,중구",3,0.358,-2.94,40.0,22.14,7,1700.0,28.6,1.0,71.4,0.0,0.0,100.0
+coffee_libre,커피리브레 (Coffee Libre),"마포구,영등포구,중구",3,0.344,-2.42,38.4,22.85,20,,60.0,2.7,0.0,75.0,30.0,10.0
+felt_coffee,펠트커피 (FELT Coffee),"종로구,강남구,서대문구",3,0.342,-2.82,35.97,27.3,1,,0.0,2.0,0.0,0.0,0.0,100.0
+fritz,프릳츠 커피 컴퍼니 (Fritz),"마포구,종로구,서초구",3,0.33,-3.31,36.35,28.35,5,6000.0,0.0,1.2,20.0,20.0,20.0,20.0
+terarosa,테라로사 (Terarosa),"종로구,강남구,서초구",3,0.386,-1.9,39.06,24.61,1,,0.0,1.0,100.0,0.0,0.0,0.0
