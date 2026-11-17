@@ -2,7 +2,7 @@
   "direct_join_districts": 25,
   "median_sales_per_store_eok": 0.1963,
   "median_weekend_share_pct": 29.73,
-  "brand_context_count": 7,
+  "brand_context_count": 8,
   "reference_cqi_vs_brands": {
     "cqi_natural_vs_washed_country_adj_diff": 0.2657,
     "cqi_natural_vs_washed_country_adj_p": 0.258517,
@@ -14,22 +14,22 @@
       "Taiwan"
     ],
     "brand_top_origins": {
-      "Unspecified/Blend": 49,
-      "Guatemala": 15,
-      "Ethiopia": 12,
-      "Colombia": 5,
-      "Panama": 3,
-      "Peru": 2,
-      "Costa Rica": 2,
-      "El Salvador": 2
+      "Unspecified/Blend": 72,
+      "Ethiopia": 24,
+      "Guatemala": 14,
+      "Costa Rica": 11,
+      "Panama": 10,
+      "Colombia": 8,
+      "Brazil": 3,
+      "Peru": 2
     },
     "brand_process_mentions": {
-      "Unspecified": 49,
-      "Washed": 21,
-      "Decaf": 9,
-      "Natural": 8,
-      "Anaerobic/Experimental": 2,
-      "Honey": 1
+      "Unspecified": 75,
+      "Washed": 30,
+      "Decaf": 22,
+      "Natural": 11,
+      "Honey": 6,
+      "Anaerobic/Experimental": 4
     }
   }
 }

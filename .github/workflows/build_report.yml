@@ -28,6 +28,7 @@ jobs:
           python -m src.analysis.brand_positioning
           python -m src.analysis.cross_analysis
           python -m src.visualization.market_cqi_charts
+          python -m src.visualization.opportunity_map
           python -m src.reporting.build_reports
           pytest -v
       - uses: actions/upload-artifact@v4
