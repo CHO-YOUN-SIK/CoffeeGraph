@@ -17,25 +17,55 @@ jobs:
           pip install -r requirements.lock
           pip install -e . --no-deps
           python -m src.cleaning.validate_seoul
-          pytest -v
+          pytest -v tests/test_data_validation.py
 
   analyze_market:
     needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "Market analysis module ready to be wired in Phase 3 (M3)."
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install -e . --no-deps
+          python -m src.analysis.market_structure
+          python -m src.analysis.consumer_context
+          pytest -v tests/test_market_metrics.py
 
   analyze_cqi:
     needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CQI analysis module ready to be wired in Phase 4 (M4)."
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install -e . --no-deps
+          python -m src.analysis.cqi_quality
+          pytest -v tests/test_cqi_metrics.py
 
   build_report:
     needs: [analyze_market, analyze_cqi]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "Report builder ready to be wired in Phase 8 (M8)."
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install -e . --no-deps
+          python -m src.analysis.market_structure
+          python -m src.analysis.consumer_context
+          python -m src.analysis.cqi_quality
+          python -m src.visualization.market_cqi_charts

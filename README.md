@@ -11,8 +11,8 @@ GitHub Cloud 기반 데이터 리서치 & BX/CX 전략 분석 프로젝트
 |---|---|---|
 | M1. Official Data Acquisition | **COMPLETED** | 서울시 공식 데이터 4종(`OA-22173`, `OA-22176`, `OA-15577`, `OA-15572`) + CQI 2종(`Arabica`, `Robusta`) 원본 수집 완료 (`data/metadata/source_registry.csv`, `collection_log.csv`) |
 | M2. Data Validation | **VALIDATED** | 전수 스키마·결측·중복·산술 정합성 검증 통과 (`data/metadata/validation_results.json`, `tests/test_data_validation.py`) |
-| M3. Seoul Market Analysis | **NOT_STARTED** | 다음 단계 진행 예정 (`src/analysis/market_structure.py`) |
-| M4. CQI Analysis | **NOT_STARTED** | `src/analysis/cqi_quality.py` |
+| M3. Seoul Market Analysis | **COMPLETED** | 자치구(25개)·상권(1,064개 매칭) 시장 구조·소비 맥락·군집 분석 및 기존 지표 재현 검증 완료 (`src/analysis/market_structure.py`, `consumer_context.py`) |
+| M4. CQI Analysis | **COMPLETED** | CQI 1,339건 전수 분석, 산지·수확시기 통제 OLS 및 표본 편향 진단 완료 (`src/analysis/cqi_quality.py`) |
 | M5. Brand Research | **NOT_STARTED** | `src/collectors/brand_collector.py` |
 | M6. Cross Analysis | **NOT_STARTED** | `src/analysis/cross_analysis.py` |
 | M7. Insights & Hypotheses | **NOT_STARTED** | `research/insights/`, `research/hypotheses/` |

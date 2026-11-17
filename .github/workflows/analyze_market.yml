@@ -2,6 +2,11 @@ name: Analyze Market
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "data/processed/seoul/**"
+      - "src/analysis/market_structure.py"
+      - "src/analysis/consumer_context.py"
 
 jobs:
   analyze-market:
@@ -17,4 +22,10 @@ jobs:
           pip install -r requirements.lock
           pip install -e . --no-deps
           python -m src.cleaning.validate_seoul
-          echo "Market analysis ready for Phase 3 (M3)."
+          python -m src.analysis.market_structure
+          python -m src.analysis.consumer_context
+          pytest -v tests/test_market_metrics.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-analysis-outputs-${{ github.run_id }}
+          path: outputs/tables/seoul_*

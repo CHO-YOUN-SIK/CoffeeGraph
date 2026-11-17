@@ -21,4 +21,9 @@ jobs:
           pip install -r requirements.lock
           pip install -e . --no-deps
           python -m src.cleaning.validate_seoul
-          echo "CQI analysis ready for Phase 4 (M4)."
+          python -m src.analysis.cqi_quality
+          pytest -v tests/test_cqi_metrics.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cqi-analysis-outputs-${{ github.run_id }}
+          path: outputs/tables/cqi_*

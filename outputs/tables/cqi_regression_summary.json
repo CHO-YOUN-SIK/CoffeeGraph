@@ -1,0 +1,35 @@
+{
+  "total_records": 1339,
+  "species_counts": {
+    "Arabica": 1311,
+    "Robusta": 28
+  },
+  "duplicate_rows": 0,
+  "outlier_zero_or_negative_cup_points": 1,
+  "valid_arabica_n": 1310,
+  "top5_countries_share_pct": 61.62,
+  "natural_vs_washed": {
+    "natural_n": 251,
+    "washed_n": 812,
+    "natural_mean": 82.3541,
+    "washed_mean": 81.9646,
+    "raw_diff": 0.3895,
+    "welch_t_stat": 1.9723,
+    "welch_p_value": 0.049247,
+    "country_adjusted_diff": 0.2657,
+    "country_adjusted_p_value": 0.258517,
+    "country_adjusted_ci95": [
+      -0.1955,
+      0.7269
+    ],
+    "country_and_harvest_adjusted_n": 1058,
+    "country_and_harvest_adjusted_diff": 0.2573,
+    "country_and_harvest_adjusted_p_value": 0.278225
+  },
+  "missing_rates_top": {
+    "Country.of.Origin": 0.0007,
+    "Processing.Method": 0.127,
+    "Harvest.Year": 0.0351,
+    "Altitude": 0.1688
+  }
+}

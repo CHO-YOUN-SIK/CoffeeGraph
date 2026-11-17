@@ -1,0 +1,7 @@
+﻿Processing.Method,count,share_pct,mean_cup_points,std_cup_points,ci95_low,ci95_high
+Washed / Wet,812,61.98,81.9646,2.6847,81.7797,82.1496
+Natural / Dry,251,19.16,82.3541,2.7499,82.0123,82.696
+(Missing),151,11.53,82.9655,2.4808,82.5666,83.3644
+Semi-washed / Semi-pulped,56,4.27,82.6336,1.7667,82.1604,83.1067
+Other,26,1.98,81.2785,3.9983,79.6635,82.8934
+Pulped natural / honey,14,1.07,82.8079,1.6872,81.8337,83.782

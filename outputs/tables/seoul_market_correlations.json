@@ -1,0 +1,67 @@
+{
+  "base_quarter": "20261",
+  "comparison_start": "20242",
+  "latest_quarter": "20262",
+  "seoul_20242_total_stores": 28639,
+  "seoul_20261_total_stores": 27333,
+  "seoul_20262_total_stores": 27351,
+  "seoul_20261_franchise_share_pct": 24.87,
+  "seoul_20261_monthly_sales_krw": 689282715962,
+  "declining_districts_20242_to_20261": 23,
+  "declining_districts_20242_to_20262": 22,
+  "correlations_20242_to_20261": {
+    "franchise_share_vs_store_change_pct": {
+      "n": 25,
+      "pearson_r": 0.0145,
+      "pearson_p": 0.945207,
+      "ci95_low": -0.3828,
+      "ci95_high": 0.4073,
+      "spearman_rho": -0.0385,
+      "spearman_p": 0.855167
+    },
+    "sales_per_store_vs_store_change_pct": {
+      "n": 25,
+      "pearson_r": 0.5641,
+      "pearson_p": 0.003312,
+      "ci95_low": 0.2175,
+      "ci95_high": 0.7844,
+      "spearman_rho": 0.5792,
+      "spearman_p": 0.002413
+    }
+  },
+  "correlations_20242_to_20262": {
+    "franchise_share_vs_store_change_pct": {
+      "n": 25,
+      "pearson_r": 0.017,
+      "pearson_p": 0.935615,
+      "ci95_low": -0.3807,
+      "ci95_high": 0.4094,
+      "spearman_rho": 0.02,
+      "spearman_p": 0.924403
+    },
+    "sales_per_store_vs_store_change_pct": {
+      "n": 25,
+      "pearson_r": 0.5667,
+      "pearson_p": 0.00314,
+      "ci95_low": 0.2211,
+      "ci95_high": 0.7859,
+      "spearman_rho": 0.5577,
+      "spearman_p": 0.003773
+    }
+  },
+  "ols_store_change_20261": {
+    "r_squared": 0.3328,
+    "adj_r_squared": 0.2721,
+    "f_pvalue": 0.011672,
+    "params": {
+      "const": -12.5008,
+      "점포당_추정매출_억원": 22.9922,
+      "프랜차이즈_비중_pct": 0.0888
+    },
+    "pvalues": {
+      "const": 0.004627,
+      "점포당_추정매출_억원": 0.003176,
+      "프랜차이즈_비중_pct": 0.497126
+    }
+  }
+}
