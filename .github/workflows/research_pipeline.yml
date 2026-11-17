@@ -68,4 +68,8 @@ jobs:
           python -m src.analysis.market_structure
           python -m src.analysis.consumer_context
           python -m src.analysis.cqi_quality
+          python -m src.analysis.flavor_language
           python -m src.visualization.market_cqi_charts
+          python -m src.visualization.flavor_language_map
+          python -m src.reporting.build_flavor_report
+          pytest -v tests/test_flavor_language.py

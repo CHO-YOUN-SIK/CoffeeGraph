@@ -1,0 +1,9 @@
+﻿brand_id,brand_name,brand_segment,sku_count,median_price_per_100g,mean_text_length,mean_sensory_specificity,mean_narrative_density,pct_specific_anchored,sku_pct_Berry,term_share_Berry,sku_pct_Citrus,term_share_Citrus,sku_pct_Stone/Other Fruit,term_share_Stone/Other Fruit,sku_pct_Floral,term_share_Floral,sku_pct_Nutty,term_share_Nutty,sku_pct_Chocolate/Cocoa,term_share_Chocolate/Cocoa,sku_pct_Sweet/Caramel,term_share_Sweet/Caramel
+felt_coffee,펠트커피 (FELT Coffee),Specialty Roaster,22,13250.0,172.5,5.36,0.094,90.9,13.6,7.4,13.6,4.4,72.7,35.3,31.8,11.8,22.7,8.8,36.4,19.1,27.3,13.2
+blue_bottle_kr,블루보틀 코리아 (Blue Bottle),Global Specialty,12,12875.0,315.7,5.33,0.726,66.7,41.7,13.5,16.7,3.8,83.3,23.1,25.0,9.6,0.0,0.0,66.7,17.3,83.3,32.7
+terarosa,테라로사 (Terarosa),Specialty Roaster,9,17200.0,861.4,4.0,0.116,100.0,0.0,0.0,0.0,0.0,100.0,50.0,0.0,0.0,100.0,50.0,0.0,0.0,0.0,0.0
+fritz,프릳츠 커피 컴퍼니 (Fritz),Specialty Roaster,10,9000.0,105.8,3.5,0.293,70.0,10.0,5.0,20.0,15.0,40.0,40.0,0.0,0.0,30.0,15.0,20.0,15.0,20.0,10.0
+coffee_libre,커피리브레 (Coffee Libre),Specialty Roaster,32,9500.0,121.9,3.06,0.0,59.4,9.4,5.7,3.1,1.9,59.4,64.2,12.5,11.3,3.1,1.9,6.2,3.8,12.5,11.3
+center_coffee,센터커피 (Center Coffee),Specialty Roaster,7,12381.0,828.0,2.0,0.207,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,100.0,100.0,0.0,0.0
+anthracite,앤트러사이트 (Anthracite),Specialty Roaster,17,8750.0,858.6,1.06,0.056,29.4,0.0,0.0,0.0,0.0,23.5,30.8,5.9,15.4,0.0,0.0,17.6,23.1,23.5,30.8
+paul_bassett,폴바셋 (Paul Bassett),Franchise Reference,20,,100.3,0.3,0.173,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,10.0,100.0,0.0,0.0,0.0,0.0
