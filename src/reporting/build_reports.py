@@ -50,8 +50,9 @@ def generate_reports() -> list[Path]:
     franchise_brands = int((brand_sum["brand_segment"] == "Franchise Reference").sum())
     total_skus = int(brand_sum["sku_count"].sum())
 
+    src_reg = pd.read_csv(METADATA_DIR / "source_registry.csv").set_index("dataset_key")
     seoul_raw_total = sum(
-        val_res["datasets"][k]["total_rows"]
+        int(val_res["datasets"][k].get("total_rows") or src_reg.loc[k, "row_count"])
         for k in ["seoul_store_district", "seoul_sales_district", "seoul_store_commercial", "seoul_sales_commercial"]
     )
     funnel = cluster_val["selection_funnel"]
