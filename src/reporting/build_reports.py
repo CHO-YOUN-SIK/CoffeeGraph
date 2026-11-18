@@ -191,14 +191,14 @@ def generate_reports() -> list[Path]:
         }
     )
 
-    report_d = f"""# D. Coffee Brand Opportunity Report — 통합 BX/CX 인사이트 및 검증 가능한 가설
+    report_d = f"""# D. Coffee Brand Opportunity Report — 통합 BX/CX 해석 및 검증할 가설 (소비자 실측 아님) 및 검증 가능한 가설
 
 ## Step 1. 사용한 데이터 및 재현성 범위
 1. **서울 열린데이터광장 공식 원본 (총 {seoul_raw_total:,}행)**:
    - `OA-22173`(점포-자치구 {_rows('seoul_store_district'):,}행), `OA-22176`(추정매출-자치구 {_rows('seoul_sales_district'):,}행), `OA-15577`(점포-상권 {_rows('seoul_store_commercial'):,}행), `OA-15572`(추정매출-상권 {_rows('seoul_sales_commercial'):,}행).
    - 필터 조건: `서비스_업종_코드 == 'CS100010'`(커피-음료). 상권 단위 `20261` 매칭: 점포 상권 {funnel['store_commercial_areas_20261']:,}개 중 매출 제공 상권 **{funnel['sales_commercial_areas_20261']:,}개** 내부 결합(`n=1,064`).
 2. **CQI Coffee Quality Database**: Arabica 1,311건 + Robusta 28건 = **{cqi['total_records']:,}건** 전수 (`VALIDATED`).
-3. **브랜드 공식 온라인몰 원두 SKU**: 총 **{total_brands}개 브랜드**(스페셜티 {specialty_brands}개 + 프랜차이즈 비교군 {franchise_brands}개) 직접 수집 검증 SKU **n={total_skus}**.
+3. **브랜드 공식 온라인몰 원두 SKU**: 총 **{total_brands}개 브랜드**(스페셜티 {specialty_brands}개 + 프랜차이즈 비교군 {franchise_brands}개) 직접 수집 카탈로그 SKU **n={total_skus}** (비원두 포함 가능, 원두 비교 모집단과 구분).
 
 ## Step 2. 개별 데이터 분석 요약 (Observed)
 - **서울 시장**: `20242`→`20261` 점포 수 28,639→27,333개(25개 구 중 23개 구 감소, `20262` 27,351개). 프랜차이즈 비중과 점포 변화율은 무관($r=0.0145, p=0.945$)한 반면, 점포당 추정매출과는 양의 상관($r=0.5641, p=0.0033$)을 보인다. `20261` 매칭 상권(n=1,064)의 `k=4` 군집은 Silhouette **{cluster_val['silhouette_score']}**(ARI {cluster_val['mean_ari_across_5_seeds']})의 연속적 유형을 보인다.
