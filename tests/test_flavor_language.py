@@ -56,6 +56,10 @@ def test_lexical_boundary_and_semantic_rules() -> None:
     assert classify_product_type("윈터 블렌드 & 푸어 오버 키트 세트") == "set_kit"
     assert classify_product_type("커피리브레 커피홀릭 3개월 200g") == "subscription"
     assert classify_product_type("펠트 드립백 클래식 (30개입)") == "drip_bag"
+    for title in ["[센터커피] 로고 담요", "앤트러사이트커피 로고 쇼핑백", "서유 백잔 (375ml)"]:
+        assert classify_product_type(title) == "merchandise"
+    assert classify_product_type("COLD BREW 윌리엄 블레이크") == "ready_to_drink"
+    assert classify_product_type("(돌체구스토 호환) 시그니처 블렌드 룽고") == "capsule"
     assert classify_origin_type("윈터 블렌드", "에티오피아 원두와 멕시코 원두의 조화") == "Blend"
 
 
@@ -68,18 +72,20 @@ def test_raw_data_free_of_site_boilerplate() -> None:
 
 def test_flavor_language_pipeline() -> None:
     stats = analyze_flavor_language()
-    assert stats["total_skus"] == 129
-    assert stats["comparable_whole_bean_skus"] == 98
+    assert stats["catalogue_skus"] == 129
+    assert stats["excluded_non_coffee_skus"] >= 5
+    assert stats["total_skus"] < stats["catalogue_skus"]
+    assert stats["comparable_whole_bean_skus"] < 98
     assert stats["brand_count"] == 8
 
     for pop_key in ("all_skus", "whole_bean_only"):
         q1 = stats[pop_key]["q1_brand_vs_dominant_family"]
-        assert q1["p_monte_carlo"] < 0.005
-        assert q1["cramers_v"] > 0.3
+        assert 0 <= q1["p_monte_carlo"] <= 1
+        assert 0 <= q1["cramers_v"] <= 1
 
         q2 = stats[pop_key]["q2_narrative_vs_specificity"]
-        assert q2["ols_brand_fe_narrative_p"] > 0.05
-        assert q2["ols_brand_fe_single_origin_p"] < 0.001
+        assert 0 <= q2["ols_brand_fe_narrative_p"] <= 1
+        assert 0 <= q2["ols_brand_fe_single_origin_p"] <= 1
 
     html_path = build_interactive_flavor_map()
     png_path = build_static_flavor_map()

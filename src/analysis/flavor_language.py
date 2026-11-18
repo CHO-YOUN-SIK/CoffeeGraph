@@ -88,14 +88,25 @@ _NARRATIVE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
 
 
 def classify_product_type(sku_name: str, tags: str = "") -> str:
-    txt = f"{sku_name} {tags}".lower()
+    """Exclude clearly non-bean catalogue items before comparing bean descriptions."""
+    title = str(sku_name or "").lower()
+    txt = f"{title} {str(tags or '').lower()}"
+    if any(k in title for k in [
+        "쇼핑백", "담요", "머그", "백잔", "흑잔", "텀블러", "드리퍼",
+        "필터지", "커피필터", "에코백", "스티커", "티셔츠", "포스터",
+        "그라인더", "밀크피처", "스푼", "마그넷", "보틀",
+        "mug", "tumbler", "shopping bag", "blanket", "merchandise",
+    ]):
+        return "merchandise"
+    if any(k in title for k in ["cold brew", "coldbrew", "콜드브루", "라떼베이스"]):
+        return "ready_to_drink"
+    if any(k in title for k in ["캡슐", "capsule", "돌체구스토", "네스프레소", "dolce gusto", "nespresso"]):
+        return "capsule"
     if any(k in txt for k in ["정기배송", "개월", "구독", "subscription"]):
         return "subscription"
-    if any(k in txt for k in ["드립백", "drip bag", "티백"]):
+    if any(k in title for k in ["드립백", "drip bag", "티백"]):
         return "drip_bag"
-    if any(k in txt for k in ["캡슐", "capsule"]):
-        return "capsule"
-    if any(k in txt for k in ["세트", "키트", "set", "kit"]):
+    if any(k in title for k in ["세트", "키트", "gift box", "기프트 박스", "set", "kit"]):
         return "set_kit"
     return "whole_bean"
 
@@ -385,7 +396,9 @@ def analyze_flavor_language() -> dict[str, Any]:
         np.nan,
     )
     coded = coded.merge(reg[["brand_id", "brand_segment"]], on="brand_id", how="left")
+    # The source catalogue remains auditable, while non-coffee items never enter language inference.
     coded.to_csv(PROCESSED_DIR / "sku_flavor_language_coded.csv", index=False, encoding="utf-8-sig")
+    eligible = coded[~coded["product_type_std"].isin(["merchandise", "ready_to_drink"])].copy()
 
     export_wcr_lexicon_mapping()
     center_audit = audit_center_coffee_zero_detection()
@@ -393,7 +406,7 @@ def analyze_flavor_language() -> dict[str, Any]:
     families = list(FLAVOR_HIERARCHY.keys())
     # Brand-level Fingerprint using SKU Mention Rate (%) + Detection Rate (%)
     fp_rows = []
-    for (bid, bname, bseg), grp in coded.groupby(["brand_id", "brand_name", "brand_segment"]):
+    for (bid, bname, bseg), grp in eligible.groupby(["brand_id", "brand_name", "brand_segment"]):
         n_skus = len(grp)
         wb_grp = grp[grp["is_comparable_whole_bean"] == 1]
         detected_n = int((grp["specificity_tier"] != "None-Stated").sum())
@@ -426,17 +439,19 @@ def analyze_flavor_language() -> dict[str, Any]:
     fp_df = pd.DataFrame(fp_rows).sort_values("mean_sensory_specificity", ascending=False).reset_index(drop=True)
     fp_df.to_csv(OUT_DIR / "brand_flavor_fingerprint.csv", index=False, encoding="utf-8-sig")
 
-    cooc_df = _compute_cooccurrence(coded, families)
+    cooc_df = _compute_cooccurrence(eligible, families)
     cooc_df.to_csv(OUT_DIR / "flavor_cooccurrence.csv", index=False, encoding="utf-8-sig")
 
-    wb_only = coded[coded["is_comparable_whole_bean"] == 1].copy()
+    wb_only = eligible[eligible["is_comparable_whole_bean"] == 1].copy()
     stats_summary = {
-        "total_skus": int(len(coded)),
+        "catalogue_skus": int(len(coded)),
+        "excluded_non_coffee_skus": int(len(coded) - len(eligible)),
+        "total_skus": int(len(eligible)),
         "comparable_whole_bean_skus": int(len(wb_only)),
         "brand_count": int(coded["brand_id"].nunique()),
         "product_type_counts": coded["product_type_std"].value_counts().to_dict(),
         "center_coffee_audit": center_audit,
-        "all_skus": _run_population_stats(coded, families),
+        "all_skus": _run_population_stats(eligible, families),
         "whole_bean_only": _run_population_stats(wb_only, families),
         "top_cooccurrences": cooc_df.head(5).to_dict(orient="records"),
     }
