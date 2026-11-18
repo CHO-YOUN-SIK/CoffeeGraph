@@ -1,7 +1,7 @@
 """Focused Report Generator for Coffee Flavor Language Map (Audited & Refined).
 
 Generates outputs/reports/Coffee_Flavor_Language_Report.md strictly separating:
-1. Observed lexical data (129 total SKUs / 98 comparable whole_bean SKUs across 8 brands)
+1. Observed lexical data (audited catalogue vs eligible SKU cohorts across 8 brands)
 2. Analytical taxonomy (SCA/WCR hierarchy, clean specificity, narrative density, product/origin type)
 3. Visual encoding rules & candidate color-flavor validation protocol
 """
@@ -48,16 +48,20 @@ def build_flavor_language_report() -> Path:
 
     pt = stats["product_type_counts"]
     lines = [
-        "# Coffee Flavor Language Map — 브랜드 향미 언어 구조 및 시각화 문법 보고서 (정제·재검증본)",
+        "# Coffee Flavor Language Map — 브랜드 향미 언어 구조 및 시각화 문법 보고서 (재설계 중)",
+        "",
+        f"> 모집단 감사: 수집 카탈로그 {stats['catalogue_skus']}개, 비커피 상품 제외 {stats['excluded_non_coffee_skus']}개, 실제 언어 분석 {stats['total_skus']}개, 원두 비교 {stats['comparable_whole_bean_skus']}개.",
+        "> 주의: 수집 채널/사이트별 제품 설명 누락 때문에 향미 미검출은 실제 제품에 향미가 없다는 뜻이 아닙니다.",
+        "> 색상 매핑은 후보 시각 문법이며 소비자 이해·선호·구매 성과는 측정되지 않았습니다.",
         "",
         "## 1. 핵심 연구 질문 및 데이터 정합성 감사 반영 사항",
         "> **핵심 질문**: *\"브랜드별 원두 설명에 나타나는 향미 언어의 차이는 무엇이며, 이를 일관된 시각적 문법으로 변환할 수 있는가?\"*",
         "",
-        "본 보고서는 초기 감사에서 발견된 측정 오류를 전수 교정한 재검증 결과입니다.",
+        "본 보고서는 알려진 상품 분류 오염을 교정한 탐색 결과이며 추가 수작업 전수 감사가 필요합니다.",
         "1. **공통 웹사이트 텍스트 제거 (문제 C 해결)**: 테라로사(`추천 검색어 피칸파이`), 센터커피·앤트러사이트(`모카포트` 등 메뉴·알림), 블루보틀(`배송 안내`), 카페24(`SOLD OUT·제조일`) 공통 문구를 스크래퍼 단계에서 원천 제거하고 제품 본문 전용 셀렉터만 추출했습니다.",
         f"   - **센터커피 0% 검출 원인 검증**: 공식 Imweb 상세페이지 HTML을 직접 점검한 결과, 본문 텍스트에는 원산지·용량·추출용도(`.goods_summary`)만 존재하며 텍스트 테이스팅 노트는 미기재(이미지 또는 미제공) 상태임을 확인했습니다.",
         "2. **WCR 참조 매핑 및 단어 경계 교정 (문제 A 해결)**: WCR Sensory Lexicon 속성을 연구자 정의 규칙으로 7개 계열에 매핑(`data/metadata/wcr_korean_lexicon_mapping.csv`)하고, 한국어 경계 정규식 + 최장 구문 우선 비겹침(non-overlapping) 매칭으로 `배송`/`중약배전`→`배`, `모카포트`→`모카`, `다크초콜릿`+`초콜릿` 중복 집계를 차단했습니다.",
-        "3. **상품 유형 분리 (문제 B 해결)**: 전체 **129개 SKU**를 `whole_bean`(**{wb}개**), `subscription`({sub}개), `drip_bag`({db}개), `set_kit`({sk}개), `capsule`({cap}개)로 분리해 비교 가능한 일반 원두 모집단과 전체 모집단을 병행 분석했습니다.".format(
+        "3. **상품 유형 분리 (문제 B 해결)**: 수집 상품을 `whole_bean`(**{wb}개**), `subscription`({sub}개), `drip_bag`({db}개), `set_kit`({sk}개), `capsule`({cap}개)로 분리해 비교 가능한 일반 원두 모집단과 전체 모집단을 병행 분석했습니다.".format(
             wb=pt.get("whole_bean", 0),
             sub=pt.get("subscription", 0),
             db=pt.get("drip_bag", 0),
@@ -71,17 +75,17 @@ def build_flavor_language_report() -> Path:
         "## 2. Relationship 01 — 브랜드 × 향미 언어 분석 결과 (Observed & Statistical)",
         "",
         "### A. 향미 계열 분포 및 브랜드 간 독립성 (Monte Carlo 순열 검정)",
-        f"- **전체 129개 SKU**: `Specific-Anchored` **{all_s['specificity_tier_counts'].get('Specific-Anchored', 0)}개**, `Broad-Only` **{all_s['specificity_tier_counts'].get('Broad-Only', 0)}개**, `None-Stated` **{all_s['specificity_tier_counts'].get('None-Stated', 0)}개** (동률 `Multi-Family (Tie)` **{all_s['dominant_family_counts'].get('Multi-Family (Tie)', 0)}개**).",
+        f"- **분석 가능 상품 {stats['total_skus']}개 SKU**: `Specific-Anchored` **{all_s['specificity_tier_counts'].get('Specific-Anchored', 0)}개**, `Broad-Only` **{all_s['specificity_tier_counts'].get('Broad-Only', 0)}개**, `None-Stated` **{all_s['specificity_tier_counts'].get('None-Stated', 0)}개** (동률 `Multi-Family (Tie)` **{all_s['dominant_family_counts'].get('Multi-Family (Tie)', 0)}개**).",
         f"- **일반 원두(whole_bean, n={wb_s['n_skus']})**: `Specific-Anchored` **{wb_s['specificity_tier_counts'].get('Specific-Anchored', 0)}개**, `Broad-Only` **{wb_s['specificity_tier_counts'].get('Broad-Only', 0)}개**, `None-Stated` **{wb_s['specificity_tier_counts'].get('None-Stated', 0)}개**.",
         f"- **브랜드 × 대표 향미 계열 독립성 검정 (희소 셀 보완)**:",
-        f"  - 전체 129 SKU 교차표는 기대빈도 5 미만 셀이 **{q1_all['sparse_cell_pct']}%**({q1_all['sparse_cells_lt5']}/{q1_all['total_cells']})이므로 점근 근사 대신 **10,000회 Monte Carlo 순열 검정**을 적용했습니다: $\\chi^2 = {q1_all['chi2']}$, **Monte Carlo $p = {q1_all['p_monte_carlo']}$**, **Cramér's $V = {q1_all['cramers_v']}$**.",
+        f"  - 분석 모집단 교차표는 기대빈도 5 미만 셀이 **{q1_all['sparse_cell_pct']}%**({q1_all['sparse_cells_lt5']}/{q1_all['total_cells']})이므로 점근 근사 대신 **10,000회 Monte Carlo 순열 검정**을 적용했습니다: $\\chi^2 = {q1_all['chi2']}$, **Monte Carlo $p = {q1_all['p_monte_carlo']}$**, **Cramér's $V = {q1_all['cramers_v']}$**.",
         f"  - 희소 범주(<5%) 통합 강건성 검정에서도 **Cramér's $V = {q1_col['cramers_v']}$** (Monte Carlo $p = {q1_col['p_monte_carlo']}$)로 유의했습니다.",
         f"  - 일반 원두(`whole_bean`, n={wb_s['n_skus']}) 한정 검정에서도 $\\chi^2 = {q1_wb['chi2']}$, **Monte Carlo $p = {q1_wb['p_monte_carlo']}$**, **Cramér's $V = {q1_wb['cramers_v']}$**로 브랜드 간 향미 언어 차이가 일관되게 확인되었습니다.",
         "",
         "### B. 감성 서사 밀도(`narrative_density`)와 감각 구체성(`sensory_specificity`)의 관계",
-        f"- **전체 129 SKU**: 단순 상관 Pearson $r = {q2_all['pearson_r']}$ ($p = {q2_all['pearson_p']}$), Spearman $\\rho = {q2_all['spearman_rho']}$ ($p = {q2_all['spearman_p']}$).",
+        f"- **분석 가능 {stats['total_skus']} SKU**: 단순 상관 Pearson $r = {q2_all['pearson_r']}$ ($p = {q2_all['pearson_p']}$), Spearman $\\rho = {q2_all['spearman_rho']}$ ($p = {q2_all['spearman_p']}$).",
         f"- **텍스트 길이·원산지 유형(`origin_type`)·브랜드 고정효과(`C(brand_id)`) 통제 OLS + TOST 동등성 검정**:",
-        f"  - 전체 129 SKU ($R^2 = {q2_all['ols_brand_fe_r2']}$): `narrative_density` $\\beta = {q2_all['ols_brand_fe_narrative_coef']}$ (95% CI `[{q2_all['ols_brand_fe_narrative_ci95'][0]}, {q2_all['ols_brand_fe_narrative_ci95'][1]}]`, $p = {q2_all['ols_brand_fe_narrative_p']}$), **TOST 동등성 검정($\\Delta = \\pm {q2_all['ols_brand_fe_narrative_tost_delta']}$) $p = {q2_all['ols_brand_fe_narrative_tost_p']}$**; `is_single_origin` $\\beta = +{q2_all['ols_brand_fe_single_origin_coef']}$ ($p = {q2_all['ols_brand_fe_single_origin_p']}$).",
+        f"  - 분석 모집단 ($R^2 = {q2_all['ols_brand_fe_r2']}$): `narrative_density` $\\beta = {q2_all['ols_brand_fe_narrative_coef']}$ (95% CI `[{q2_all['ols_brand_fe_narrative_ci95'][0]}, {q2_all['ols_brand_fe_narrative_ci95'][1]}]`, $p = {q2_all['ols_brand_fe_narrative_p']}$), **TOST 동등성 검정($\\Delta = \\pm {q2_all['ols_brand_fe_narrative_tost_delta']}$) $p = {q2_all['ols_brand_fe_narrative_tost_p']}$**; `is_single_origin` $\\beta = +{q2_all['ols_brand_fe_single_origin_coef']}$ ($p = {q2_all['ols_brand_fe_single_origin_p']}$).",
         f"  - 일반 원두(n={wb_s['n_skus']}, $R^2 = {q2_wb['ols_brand_fe_r2']}$): `narrative_density` $\\beta = {q2_wb['ols_brand_fe_narrative_coef']}$ (95% CI `[{q2_wb['ols_brand_fe_narrative_ci95'][0]}, {q2_wb['ols_brand_fe_narrative_ci95'][1]}]`, $p = {q2_wb['ols_brand_fe_narrative_p']}$), **TOST 동등성 검정($\\Delta = \\pm {q2_wb['ols_brand_fe_narrative_tost_delta']}$) $p = {q2_wb['ols_brand_fe_narrative_tost_p']}$**; `is_single_origin` $\\beta = +{q2_wb['ols_brand_fe_single_origin_coef']}$ ($p = {q2_wb['ols_brand_fe_single_origin_p']}$).",
         "- **결론**: 비유의한 p값만으로 독립을 단정하지 않고 95% 신뢰구간과 TOST 동등성 검정($|\\beta| < 0.5$)을 확인한 결과, 두 언어 차원은 실질적 상충 없이 독립적으로 설계 가능합니다.",
         "",
