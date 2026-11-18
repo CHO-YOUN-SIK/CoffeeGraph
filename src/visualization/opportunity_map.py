@@ -64,7 +64,7 @@ def build_opportunity_map() -> Path:
         subplot_titles=(
             "1. 서울 25개 자치구 점포 변화율 (2024Q2→2026Q1, 2026Q2 병기)",
             "2. 상권 소비 맥락 4군집 (n=1,064 | 점포당 매출 vs 주말 비중)",
-            "3. 브랜드 향미 언어 포지셔닝 맵 (원 크기=100g당 가격)",
+            "3. 브랜드 언어 포지셔닝 (가격 결측치 보간 없음 · 기회 영역 미검증)",
             "4. 브랜드별 9차원 향미 언어 프로필 (%)",
         ),
         vertical_spacing=0.14,
@@ -141,31 +141,11 @@ def build_opportunity_map() -> Path:
     fig.update_yaxes(title_text="주말 매출 비중 (%)", row=1, col=2)
 
     # --- Panel 3: Brand Positioning Map ---
-    # Shaded BX/CX Opportunity Whitespace: balanced narrative (15-45%) + high sensory clarity (>=2.2 dims)
-    fig.add_shape(
-        type="rect",
-        x0=15,
-        x1=45,
-        y0=2.2,
-        y1=max(3.8, float(brand_df["mean_sensory_dims"].max()) + 0.5),
-        fillcolor="rgba(46, 139, 87, 0.12)",
-        line=dict(color="rgba(46, 139, 87, 0.6)", dash="dash", width=1.5),
-        row=2,
-        col=1,
-    )
-    fig.add_annotation(
-        x=30,
-        y=max(3.6, float(brand_df["mean_sensory_dims"].max()) + 0.35),
-        text="BX/CX 기회 영역<br>(적정 서사 × 고감각 번역)",
-        showarrow=False,
-        font=dict(size=10.5, color="#1e6b43"),
-        row=2,
-        col=1,
-    )
+    # Coordinates describe supplier language only; no consumer-derived opportunity region.
+    # Do not draw an unvalidated "whitespace" target onto this graph.
 
     for seg, grp in brand_df.groupby("brand_segment"):
-        prices = grp["median_price_per_100g"].fillna(9000)
-        sizes = np.clip(prices / 450, 14, 42)
+        sizes = np.full(len(grp), 19.0)  # avoid price imputation and category bias
         hover_b = []
         for _, r in grp.iterrows():
             price_str = f"{int(r['median_price_per_100g']):,}원" if pd.notna(r["median_price_per_100g"]) else "미표기"
