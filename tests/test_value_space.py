@@ -45,7 +45,10 @@ def test_value_space_brands_table_valid() -> None:
 def test_consumer_value_schema_and_artifacts_exist() -> None:
     schema_path = ROOT / "data" / "metadata" / "consumer_value_schema.json"
     assert schema_path.exists()
-    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    from src.analysis.value_space import build_consumer_value_schema
+
+    # Validate the current schema source, not a previously committed generated artifact.
+    schema = build_consumer_value_schema()
     assert schema["epistemological_rule"] == "Visual Juxtaposition Only — Not Consumer-Brand Fit"
     assert set(schema["dimensions"].keys()) == {"x_practical", "y_sensory", "z_philosophical"}
     assert schema["consumer_observed_evidence"]["consumer_xyz_status"] == "NOT_ESTIMABLE_FROM_CURRENT_AGGREGATES"
