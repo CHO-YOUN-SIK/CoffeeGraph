@@ -336,7 +336,9 @@ def compute_brand_value_space() -> tuple[pd.DataFrame, dict[str, Any]]:
         "z_unobserved_brand_ids": df.loc[df["z_philosophical"].isna(), "brand_id"].tolist(),
         "brands": out_df[
             ["brand_id", "brand_name", "x_practical", "y_sensory", "z_philosophical", "z_disclosure_tier"]
-        ].to_dict(orient="records"),
+        ].astype(object).where(pd.notna(out_df[
+            ["brand_id", "brand_name", "x_practical", "y_sensory", "z_philosophical", "z_disclosure_tier"]
+        ]), None).to_dict(orient="records"),
     }
     return out_df, summary
 
@@ -347,7 +349,7 @@ def main() -> None:
 
     out_df, summary = compute_brand_value_space()
     out_df.to_csv(OUT_BRANDS_CSV, index=False, encoding="utf-8-sig")
-    OUT_SUMMARY_JSON.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    OUT_SUMMARY_JSON.write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
     OUT_CONSUMER_SCHEMA_JSON.write_text(
         json.dumps(build_consumer_value_schema(), ensure_ascii=False, indent=2), encoding="utf-8"
     )
