@@ -54,3 +54,6 @@ Seoul CS100010 district/commercial-area estimated sales, store counts and transa
 - Consumer/brand comparators may not share a numerical axis until measurement equivalence is demonstrated.
 - Z brand coordinate can be NaN: render visibly as "not located", never infer (0,0,0).
 - Automated tests verify pipeline semantics, but source-content review and data licensing still need manual follow-up.
+
+## Optional aesthetic artifact
+`python -m src.visualization.value_constellation_3d` generates `outputs/figures/coffee_value_constellation_3d.html`: an interactive, mouse-rotatable 3D filament sculpture. Coordinates use brand text proxies only; strand count depends on sensory-text metrics, the orb's width reflects the observed SKU count, and each brand gets a stable deterministic curve family. Survey figures appear as a separately cited explanatory line, not a fabricated consumer field. Missing-Z brands are explicitly labelled unplaced.
