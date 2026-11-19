@@ -101,7 +101,9 @@ def minmax_scale(series: pd.Series, invert: bool = False) -> pd.Series:
 
 
 def classify_z_disclosure(clean_len: int, phil_hits: int) -> str:
-    """Explicitly separate disclosure richness from philosophical absence."""
+    """Evidence coverage, not a ranking of brands' moral commitments."""
+    if clean_len < 120:
+        return "Insufficient Source Text"
     if clean_len >= 1000 and phil_hits >= 8:
         return "Rich Disclosure"
     if clean_len >= 400 and phil_hits >= 2:
@@ -153,6 +155,13 @@ def build_consumer_value_schema() -> dict[str, Any]:
                 "scale": "[0, 100] normalized composite",
             },
         },
+        "consumer_observed_evidence": {
+            "file": "data/curated/consumer/opensurvey_cafe_2025_public_metrics.csv",
+            "output": "outputs/tables/consumer_value_evidence.json",
+            "status": "five_published_aggregate_indicators_ingested",
+            "consumer_xyz_status": "NOT_ESTIMABLE_FROM_CURRENT_AGGREGATES",
+            "warning": "Different survey items and bases cannot be averaged into one 3D consumer profile.",
+        },
         "source_registry": [
             {
                 "source_id": "krei_food_survey_2025",
@@ -170,7 +179,7 @@ def build_consumer_value_schema() -> dict[str, Any]:
                 "url": "https://blog.opensurvey.co.kr/trendreport/cafe-2025/",
                 "sample_note": "n=2,000 national (20-59) + 200x6 franchise users (Nov 2025)",
                 "license_restriction": "No redistribution of full report/raw tables; cite aggregate metrics only",
-                "status": "public_summary_audited",
+                "status": "five_public_aggregate_metrics_ingested",
             },
         ],
     }
@@ -266,10 +275,15 @@ def compute_brand_value_space() -> tuple[pd.DataFrame, dict[str, Any]]:
     df["y_sensory"] = (0.50 * y_spec + 0.30 * y_det + 0.20 * y_kw).round(2)
 
     # Z: 60% philosophy keyword hits + 40% log-scaled clean philosophy text length
-    z_kw = minmax_scale(df["philosophy_keyword_hits"].astype(float))
-    z_len = minmax_scale(np.log1p(df["philosophy_clean_length"].astype(float)))
+    # Raw HTML/nav-only or inaccessible pages are missing observations, not zero values.
+    # A short authentic text (>=120 chars) is allowed but labelled as limited evidence.
+    sufficient_z = df["philosophy_clean_length"] >= 120
+    valid_z_kw = df["philosophy_keyword_hits"].astype(float).where(sufficient_z, np.nan)
+    valid_z_length = np.log1p(df["philosophy_clean_length"].astype(float).where(sufficient_z, np.nan))
+    z_kw = minmax_scale(valid_z_kw)
+    z_len = minmax_scale(valid_z_length)
     df["z_philosophical"] = (0.60 * z_kw + 0.40 * z_len).round(2)
-
+    df["z_evidence_status"] = np.where(sufficient_z, "Observed public text", "Missing or insufficient public text")
     df["z_disclosure_tier"] = [
         classify_z_disclosure(int(cl), int(kh))
         for cl, kh in zip(df["philosophy_clean_length"], df["philosophy_keyword_hits"])
@@ -294,6 +308,7 @@ def compute_brand_value_space() -> tuple[pd.DataFrame, dict[str, Any]]:
         "phil_sensory_hits",
         "philosophy_keyword_hits",
         "z_disclosure_tier",
+        "z_evidence_status",
         "x_practical",
         "y_sensory",
         "z_philosophical",
@@ -308,14 +323,17 @@ def compute_brand_value_space() -> tuple[pd.DataFrame, dict[str, Any]]:
         "axes": {
             "x_practical": "Practical Value (convenience SKU share, price accessibility, practical language)",
             "y_sensory": "Sensory Value (Track A sensory specificity, flavor detection rate, sensory narrative)",
-            "z_philosophical": "Philosophical Value (official sustainability/direct-trade/craft disclosure & keywords)",
+            "z_philosophical": "Official philosophy-related disclosure proxy (keyword & text coverage); NOT intrinsic brand values",
         },
         "disclosure_tiers": out_df["z_disclosure_tier"].value_counts().to_dict(),
         "epistemological_note": (
-            "Brand Identity coordinates reflect publicly disclosed product & official page signals only. "
-            "Minimal/Unstated Z tiers indicate low public web disclosure, not absence of brand philosophy. "
-            "Future Consumer Field overlays (KREI 2025 / Opensurvey 2025) represent Visual Juxtaposition only."
+            "Brand coordinates reflect observed source coverage and heuristic textual proxies only. "
+            "Missing/Insufficient Z is an unobserved value, not zero philosophical commitment. "
+            "The five available Opensurvey aggregates concern different questions and must not be "
+            "converted to consumer X/Y/Z positions or consumer-brand fit without aligned survey items."
         ),
+        "z_missing_count": int(df["z_philosophical"].isna().sum()),
+        "z_unobserved_brand_ids": df.loc[df["z_philosophical"].isna(), "brand_id"].tolist(),
         "brands": out_df[
             ["brand_id", "brand_name", "x_practical", "y_sensory", "z_philosophical", "z_disclosure_tier"]
         ].to_dict(orient="records"),
