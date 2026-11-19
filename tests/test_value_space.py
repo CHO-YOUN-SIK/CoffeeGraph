@@ -13,18 +13,18 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_official_brand_philosophy_raw_has_all_brands() -> None:
     path = ROOT / "data" / "raw" / "brands" / "official_brand_philosophy_raw.csv"
     assert path.exists()
-    from src.analysis.value_space import compute_brand_value_space
-
-    df, _ = compute_brand_value_space()
+    df = pd.read_csv(path)
     assert len(df) == 8
     assert df["brand_id"].nunique() == 8
     assert (df["text_length"] > 0).all()
 
 
 def test_value_space_brands_table_valid() -> None:
+    from src.analysis.value_space import compute_brand_value_space
+
     path = ROOT / "outputs" / "tables" / "value_space_brands.csv"
     assert path.exists()
-    df = pd.read_csv(path)
+    df, _ = compute_brand_value_space()
     assert len(df) == 8
     for col in ("x_practical", "y_sensory"):
         assert df[col].notna().all()
