@@ -22,9 +22,9 @@ GitHub Cloud 기반 데이터 리서치 & 커피 향미 언어 시각화 문법 
 | M6. Visual Grammar & Maps | **COMPLETED** | Brand Language Landscape & Flavor Language Fingerprint 생성 (`outputs/figures/coffee_flavor_language_map.html`, `fig05_flavor_language_map.png`) |
 | M7. Flavor Language Report & Validation | **COMPLETED** | 핵심 보고서(`outputs/reports/Coffee_Flavor_Language_Report.md`) 및 한국 소비자 색–향미 매칭 실험 프로토콜 설계 |
 | M8. Background Reports (A~D) | **COMPLETED** | 배경 시장·CQI·교차 분석 보고서(`outputs/reports/A~D`) 및 근거 추적표(`research/evidence/evidence_ledger.csv`) |
-| M9. Track C: 3D Brand Value Space | **COMPLETED** | 8개 브랜드 공식 소개·지속가능성·CSR 페이지 수집(`src/collectors/brand_philosophy_collector.py`), Practical(X)×Sensory(Y)×Philosophical(Z) 좌표 산출(`src/analysis/value_space.py`), 3D 인터랙티브 프로토타입(`outputs/figures/coffee_value_space_3d.html`, `fig07_brand_value_space_3d.png`) 및 소비자 가치 스키마(`data/metadata/consumer_value_schema.json`) 구축 |
+| M9. Track C: 3D Brand Value Space | **EXPLORATORY** | 8개 브랜드 공식 소개·지속가능성·CSR 페이지 수집(`src/collectors/brand_philosophy_collector.py`), Practical(X)×Sensory(Y)×Philosophical(Z) 좌표 산출(`src/analysis/value_space.py`), 3D 인터랙티브 프로토타입(`outputs/figures/coffee_value_space_3d.html`, `fig07_brand_value_space_3d.png`) 및 소비자 가치 스키마(`data/metadata/consumer_value_schema.json`) 구축 |
 
-## 3. 수집 및 검증된 공식 데이터 현황
+| M10. Consumer Value Evidence | **PARTIAL: PUBLIC AGGREGATES** | 오픈서베이 2025 공개 원문에 명시된 관찰 지표 5개를 출처·문항 구분과 함께 별도 수집; 동일 척도의 소비자 X/Y/Z 좌표 및 브랜드 적합도는 아직 산출 불가 (`data/curated/consumer/opensurvey_cafe_2025_public_metrics.csv`) |\n\n> **주의:** 기존 3D Z축은 브랜드 본질적 가치가 아니라 공식 웹 텍스트의 공개·수집 범위에 따른 탐색적 지표입니다. 정보가 수집되지 않은 브랜드는 값이 0인 것이 아니라 관측 불가로 처리합니다.\n\n| M11. 3D Data Sculpture | **IMPLEMENTED (EXPLORATORY)** | 관측 가능한 브랜드 데이터만을 결정론적 곡면·궤적으로 표현하는 별도 3D Value Constellation (`src/visualization/value_constellation_3d.py`); 소비자 조사 수치는 좌표가 아닌 근거 설명으로 제공 |\n\n## 3. 수집 및 검증된 공식 데이터 현황
 
 | Dataset Key | ID | 전체 행수 | 열수 | `CS100010` 행수 | 제공 기간 | 상태 |
 |---|---|---:|---:|---:|---|---|

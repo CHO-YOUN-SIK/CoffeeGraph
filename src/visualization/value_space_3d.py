@@ -44,31 +44,13 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
     """Create interactive 3D Value Space HTML figure."""
     fig = go.Figure()
 
-    # 1. Translucent Consumer Field Reference Placeholder (awaiting KREI 2025 / Opensurvey 2025)
-    u = np.linspace(0, 2 * np.pi, 24)
-    v = np.linspace(0, np.pi, 16)
-    cx, cy, cz = 58.0, 52.0, 38.0
-    rx, ry, rz = 26.0, 24.0, 22.0
-    xs = cx + rx * np.outer(np.cos(u), np.sin(v))
-    ys = cy + ry * np.outer(np.sin(u), np.sin(v))
-    zs = cz + rz * np.outer(np.ones_like(u), np.cos(v))
-
-    fig.add_trace(
-        go.Surface(
-            x=xs,
-            y=ys,
-            z=zs,
-            opacity=0.12,
-            showscale=False,
-            colorscale=[[0, "#B89B72"], [1, "#B89B72"]],
-            name="Consumer Field (Placeholder: Awaiting KREI/Opensurvey 2025)",
-            hoverinfo="skip",
-            showlegend=True,
-        )
-    )
+    # Do not render a synthetic consumer ellipsoid: survey data provide no aligned XYZ.
+    # Public consumer survey findings are presented as annotations, not 3D coordinates.
+    observed = df[df["z_philosophical"].notna()].copy()
+    missing = df[df["z_philosophical"].isna()].copy()
 
     # 2. Sculptural floor drop-lines & origin vectors for 3D spatial depth
-    for _, row in df.iterrows():
+    for _, row in observed.iterrows():
         color = TIER_COLORS.get(row["z_disclosure_tier"], "#6E7885")
         x, y, z = row["x_practical"], row["y_sensory"], row["z_philosophical"]
         # Drop-line to XY floor (z=0)
@@ -99,7 +81,7 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
         )
 
     # 3. Brand Identity nodes grouped by z_disclosure_tier
-    for tier, grp in df.groupby("z_disclosure_tier", sort=False):
+    for tier, grp in observed.groupby("z_disclosure_tier", sort=False):
         color = TIER_COLORS.get(tier, "#6E7885")
         labels = [SHORT_LABELS.get(b, b) for b in grp["brand_id"]]
         hover_texts = [
@@ -139,9 +121,9 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         title=dict(
             text=(
-                "CoffeeGraph Track C: 3D Brand Value Space Prototype<br>"
-                "<sup>Practical (X) × Sensory (Y) × Philosophical (Z) · "
-                "Visual Juxtaposition — Not Consumer-Brand Fit</sup>"
+                "CoffeeGraph Track C: 3D Brand Disclosure Explorer<br>"
+                "<sup>Observed Brand Text Proxies Only · Consumer Survey = Separate Evidence · "
+                "Not Consumer-Brand Fit</sup>"
             ),
             x=0.5,
             font=dict(size=18, color="#1F242B"),
@@ -164,7 +146,7 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
                 zerolinecolor="#B8B0A2",
             ),
             zaxis=dict(
-                title="Z · Philosophical Value (Official Sustainability & Craft)",
+                title="Z · Official Philosophy Disclosure Proxy (not brand ethics)",
                 range=[0, 105],
                 backgroundcolor="#EFEAE0",
                 gridcolor="#D8D2C7",
@@ -172,6 +154,25 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
             ),
             camera=dict(eye=dict(x=1.45, y=1.45, z=1.1)),
         ),
+        annotations=[
+            dict(
+                x=0.01, y=-0.045, xref="paper", yref="paper",
+                xanchor="left", yanchor="top", showarrow=False, align="left",
+                text=(
+                    "Consumer survey evidence (2025, national): 82.4% have tried drink customization; "
+                    "58.4% cite coffee/bean quality and 49.8% atmosphere among premium cues. "
+                    "Different questions, not shared X/Y/Z coordinates."
+                ),
+                font=dict(size=10, color="#565B63"),
+            ),
+            dict(
+                x=0.99, y=0.01, xref="paper", yref="paper",
+                xanchor="right", showarrow=False,
+                text="Unplaced brands (missing Z): " +
+                     (", ".join(SHORT_LABELS.get(b, b) for b in missing["brand_id"]) if len(missing) else "none"),
+                font=dict(size=10, color="#9A4554"),
+            ),
+        ],
         legend=dict(
             x=0.01,
             y=0.98,
@@ -180,7 +181,7 @@ def build_plotly_3d(df: pd.DataFrame) -> go.Figure:
             borderwidth=1,
             font=dict(size=11),
         ),
-        margin=dict(l=10, r=10, t=75, b=20),
+        margin=dict(l=10, r=10, t=75, b=80),
     )
     return fig
 
@@ -190,7 +191,7 @@ def build_static_png(df: pd.DataFrame) -> None:
     plt.rcParams["font.family"] = "DejaVu Sans"
     fig = plt.figure(figsize=(15, 11), facecolor="#F8F6F2")
     fig.suptitle(
-        "CoffeeGraph Track C: 3D Brand Value Space (Practical × Sensory × Philosophical)",
+        "CoffeeGraph Track C: Brand Disclosure Proxies (Practical × Sensory × Published Philosophy)",
         fontsize=15,
         fontweight="bold",
         color="#1F242B",
@@ -199,8 +200,8 @@ def build_static_png(df: pd.DataFrame) -> None:
     fig.text(
         0.5,
         0.935,
-        "Brand Identity coordinates from SKU data (n=129) & official brand pages (n=8) · "
-        "Minimal/Unstated Z = low public web disclosure · Visual Juxtaposition — Not Consumer Fit",
+        "Public brand-text proxies only · Missing source text is unobserved (not Z=0) · "
+        "Consumer survey data cannot be plotted as comparable XYZ without matching measurements",
         ha="center",
         fontsize=9.5,
         color="#4B525C",
@@ -208,7 +209,7 @@ def build_static_png(df: pd.DataFrame) -> None:
 
     # Panel 1: 3D Isometric View
     ax3d = fig.add_subplot(2, 2, 1, projection="3d", facecolor="#F8F6F2")
-    for _, row in df.iterrows():
+    for _, row in df[df["z_philosophical"].notna()].iterrows():
         c = TIER_COLORS.get(row["z_disclosure_tier"], "#6E7885")
         x, y, z = row["x_practical"], row["y_sensory"], row["z_philosophical"]
         ax3d.plot([x, x], [y, y], [0, z], linestyle=":", color=c, alpha=0.55, linewidth=1.2)
@@ -253,7 +254,7 @@ def build_static_png(df: pd.DataFrame) -> None:
         ax.axhline(50, color="#B8B0A2", linewidth=0.9, linestyle="-.")
         ax.axvline(50, color="#B8B0A2", linewidth=0.9, linestyle="-.")
 
-        for _, row in df.iterrows():
+        for _, row in df[df["z_philosophical"].notna()].iterrows():
             c = TIER_COLORS.get(row["z_disclosure_tier"], "#6E7885")
             ax.scatter(
                 row[xcol],
@@ -287,10 +288,10 @@ def build_static_png(df: pd.DataFrame) -> None:
         for spine in ("top", "right"):
             ax.spines[spine].set_visible(False)
 
-    # Shared Legend
+    # Shared Legend: only disclosure tiers with valid 3D coordinates are shown.
     handles = [
         plt.Line2D([0], [0], marker="o", color="w", label=f"Z-Tier: {tier}", markerfacecolor=col, markersize=9)
-        for tier, col in TIER_COLORS.items()
+        for tier, col in TIER_COLORS.items() if tier in set(df.loc[df["z_philosophical"].notna(), "z_disclosure_tier"])
     ]
     fig.legend(
         handles=handles,
@@ -303,7 +304,9 @@ def build_static_png(df: pd.DataFrame) -> None:
         bbox_to_anchor=(0.5, 0.015),
     )
 
-    plt.tight_layout(rect=[0.01, 0.05, 0.99, 0.92])
+    unplaced = df.loc[df["z_philosophical"].isna(), "brand_id"].tolist()
+    fig.text(0.5, 0.055, "Missing Z (not plotted): " + ", ".join(unplaced), ha="center", fontsize=9, color="#9A4554")
+    plt.tight_layout(rect=[0.01, 0.085, 0.99, 0.92])
     OUT_PNG.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT_PNG, dpi=200)
     plt.close(fig)

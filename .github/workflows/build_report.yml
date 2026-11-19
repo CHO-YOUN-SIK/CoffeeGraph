@@ -7,6 +7,9 @@ on:
       - "src/analysis/**"
       - "src/reporting/**"
       - "src/visualization/**"
+      - "tests/**"
+      - "data/curated/consumer/**"
+      - ".github/workflows/build_report.yml"
 
 jobs:
   build-report:
@@ -30,11 +33,13 @@ jobs:
           python -m src.analysis.flavor_language
           python -m src.analysis.cross_analysis
           python -m src.analysis.value_space
+          python -m src.analysis.consumer_value_evidence
           python -m src.visualization.market_cqi_charts
           python -m src.visualization.market_validation_map
           python -m src.visualization.opportunity_map
           python -m src.visualization.flavor_language_map
           python -m src.visualization.value_space_3d
+          python -m src.visualization.value_constellation_3d
           python -m src.reporting.build_reports
           python -m src.reporting.build_flavor_report
           pytest -v
