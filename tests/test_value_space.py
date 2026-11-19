@@ -83,3 +83,14 @@ def test_brand_3d_excludes_made_up_consumer_positions() -> None:
     assert not any("Consumer Field" in str(getattr(trace, "name", "")) for trace in fig.data)
     assert all(pd.notna(z) for trace in fig.data
                for z in list(getattr(trace, "z", []) if getattr(trace, "z", None) is not None else []))
+
+
+def test_value_constellation_3d_is_data_anchored() -> None:
+    from src.analysis.value_space import compute_brand_value_space
+    from src.visualization.value_constellation_3d import build_constellation
+
+    df, _ = compute_brand_value_space()
+    fig = build_constellation(df)
+    assert len(fig.data) >= 7 * int(df["z_philosophical"].notna().sum())
+    assert all("Consumer Field" not in str(getattr(trace, "name", "")) for trace in fig.data)
+    assert "No consumer XYZ available" in str(fig.layout.annotations[1].text)
