@@ -1,0 +1,81 @@
+{
+  "track": "Track C — 3D Brand Value Space",
+  "brand_count": 8,
+  "axes": {
+    "x_practical": "Practical Value (convenience SKU share, price accessibility, practical language)",
+    "y_sensory": "Sensory Value (Track A sensory specificity, flavor detection rate, sensory narrative)",
+    "z_philosophical": "Philosophical Value (official sustainability/direct-trade/craft disclosure & keywords)"
+  },
+  "disclosure_tiers": {
+    "Minimal / Unstated": 4,
+    "Moderate Disclosure": 3,
+    "Rich Disclosure": 1
+  },
+  "epistemological_note": "Brand Identity coordinates reflect publicly disclosed product & official page signals only. Minimal/Unstated Z tiers indicate low public web disclosure, not absence of brand philosophy. Future Consumer Field overlays (KREI 2025 / Opensurvey 2025) represent Visual Juxtaposition only.",
+  "brands": [
+    {
+      "brand_id": "coffee_libre",
+      "brand_name": "커피리브레 (Coffee Libre)",
+      "x_practical": 75.5,
+      "y_sensory": 37.94,
+      "z_philosophical": 100.0,
+      "z_disclosure_tier": "Rich Disclosure"
+    },
+    {
+      "brand_id": "blue_bottle_kr",
+      "brand_name": "블루보틀 코리아 (Blue Bottle)",
+      "x_practical": 8.0,
+      "y_sensory": 58.69,
+      "z_philosophical": 60.04,
+      "z_disclosure_tier": "Moderate Disclosure"
+    },
+    {
+      "brand_id": "paul_bassett",
+      "brand_name": "폴바셋 (Paul Bassett)",
+      "x_practical": 88.57,
+      "y_sensory": 6.6,
+      "z_philosophical": 51.33,
+      "z_disclosure_tier": "Moderate Disclosure"
+    },
+    {
+      "brand_id": "felt_coffee",
+      "brand_name": "펠트커피 (FELT Coffee)",
+      "x_practical": 35.4,
+      "y_sensory": 97.52,
+      "z_philosophical": 38.61,
+      "z_disclosure_tier": "Moderate Disclosure"
+    },
+    {
+      "brand_id": "fritz",
+      "brand_name": "프릳츠 커피 컴퍼니 (Fritz)",
+      "x_practical": 46.47,
+      "y_sensory": 71.5,
+      "z_philosophical": 35.05,
+      "z_disclosure_tier": "Minimal / Unstated"
+    },
+    {
+      "brand_id": "anthracite",
+      "brand_name": "앤트러사이트 (Anthracite)",
+      "x_practical": 51.88,
+      "y_sensory": 27.66,
+      "z_philosophical": 30.95,
+      "z_disclosure_tier": "Minimal / Unstated"
+    },
+    {
+      "brand_id": "terarosa",
+      "brand_name": "테라로사 (Terarosa)",
+      "x_practical": 19.18,
+      "y_sensory": 45.06,
+      "z_philosophical": 0.0,
+      "z_disclosure_tier": "Minimal / Unstated"
+    },
+    {
+      "brand_id": "center_coffee",
+      "brand_name": "센터커피 (Center Coffee)",
+      "x_practical": 2.6,
+      "y_sensory": 0.0,
+      "z_philosophical": 0.0,
+      "z_disclosure_tier": "Minimal / Unstated"
+    }
+  ]
+}

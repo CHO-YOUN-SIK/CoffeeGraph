@@ -29,10 +29,12 @@ jobs:
           python -m src.analysis.brand_positioning
           python -m src.analysis.flavor_language
           python -m src.analysis.cross_analysis
+          python -m src.analysis.value_space
           python -m src.visualization.market_cqi_charts
           python -m src.visualization.market_validation_map
           python -m src.visualization.opportunity_map
           python -m src.visualization.flavor_language_map
+          python -m src.visualization.value_space_3d
           python -m src.reporting.build_reports
           python -m src.reporting.build_flavor_report
           pytest -v

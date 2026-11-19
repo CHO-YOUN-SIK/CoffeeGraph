@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Track C Consumer Field X/Y/Z overlay specification",
+  "epistemological_rule": "Visual Juxtaposition Only — Not Consumer-Brand Fit",
+  "dimensions": {
+    "x_practical": {
+      "label": "Practical Value (실용적 가치)",
+      "krei_2025_indicators": [
+        "가격/가성비 중시 응답 비중",
+        "구매 편의성·접근성 중시 응답 비중",
+        "RTD/캡슐/스틱/드립백 등 간편형 커피 구매 빈도"
+      ],
+      "opensurvey_2025_indicators": [
+        "가성비·프로모션·쿠폰 기반 브랜드 선택 비중",
+        "접근성·주문 편의성(사이렌오더/배달/DT) 이용률"
+      ],
+      "scale": "[0, 100] normalized composite"
+    },
+    "y_sensory": {
+      "label": "Sensory Value (감각적 가치)",
+      "krei_2025_indicators": [
+        "맛·향·품질 중시 응답 비중",
+        "원두/스페셜티 커피 선호 비중"
+      ],
+      "opensurvey_2025_indicators": [
+        "원두/산미/디카페인 등 커스터마이징 이용률 (2025 공개 요약: 80%)",
+        "커피 맛·향미 전문성 기반 브랜드 선택 비중"
+      ],
+      "scale": "[0, 100] normalized composite"
+    },
+    "z_philosophical": {
+      "label": "Philosophical Value (철학적·윤리적 가치)",
+      "krei_2025_indicators": [
+        "친환경·윤리적 소비·공정무역 고려 비중",
+        "원산지/생산이력 확인 비중"
+      ],
+      "opensurvey_2025_indicators": [
+        "브랜드 철학·지속가능성·친환경 캠페인 공감/선택 비중"
+      ],
+      "scale": "[0, 100] normalized composite"
+    }
+  },
+  "source_registry": [
+    {
+      "source_id": "krei_food_survey_2025",
+      "name": "KREI 식품소비행태조사 2025",
+      "access_mode": "manual_excel_download",
+      "url": "https://www.krei.re.kr/foodSurvey/page/460?cmd=view&pst=505133",
+      "license_restriction": "Non-commercial / No-derivative; do not redistribute raw microdata",
+      "status": "awaiting_local_excel_drop",
+      "expected_drop_path": "data/external/krei_2025/"
+    },
+    {
+      "source_id": "opensurvey_cafe_trend_2025",
+      "name": "오픈서베이 카페 트렌드 리포트 2025",
+      "access_mode": "public_summary_and_gated_pdf",
+      "url": "https://blog.opensurvey.co.kr/trendreport/cafe-2025/",
+      "sample_note": "n=2,000 national (20-59) + 200x6 franchise users (Nov 2025)",
+      "license_restriction": "No redistribution of full report/raw tables; cite aggregate metrics only",
+      "status": "public_summary_audited"
+    }
+  ]
+}

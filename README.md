@@ -22,6 +22,7 @@ GitHub Cloud 기반 데이터 리서치 & 커피 향미 언어 시각화 문법 
 | M6. Visual Grammar & Maps | **COMPLETED** | Brand Language Landscape & Flavor Language Fingerprint 생성 (`outputs/figures/coffee_flavor_language_map.html`, `fig05_flavor_language_map.png`) |
 | M7. Flavor Language Report & Validation | **COMPLETED** | 핵심 보고서(`outputs/reports/Coffee_Flavor_Language_Report.md`) 및 한국 소비자 색–향미 매칭 실험 프로토콜 설계 |
 | M8. Background Reports (A~D) | **COMPLETED** | 배경 시장·CQI·교차 분석 보고서(`outputs/reports/A~D`) 및 근거 추적표(`research/evidence/evidence_ledger.csv`) |
+| M9. Track C: 3D Brand Value Space | **COMPLETED** | 8개 브랜드 공식 소개·지속가능성·CSR 페이지 수집(`src/collectors/brand_philosophy_collector.py`), Practical(X)×Sensory(Y)×Philosophical(Z) 좌표 산출(`src/analysis/value_space.py`), 3D 인터랙티브 프로토타입(`outputs/figures/coffee_value_space_3d.html`, `fig07_brand_value_space_3d.png`) 및 소비자 가치 스키마(`data/metadata/consumer_value_schema.json`) 구축 |
 
 ## 3. 수집 및 검증된 공식 데이터 현황
 
