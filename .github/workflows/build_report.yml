@@ -30,6 +30,7 @@ jobs:
           python -m src.analysis.flavor_language
           python -m src.analysis.cross_analysis
           python -m src.analysis.value_space
+          python -m src.analysis.consumer_value_evidence
           python -m src.visualization.market_cqi_charts
           python -m src.visualization.market_validation_map
           python -m src.visualization.opportunity_map
