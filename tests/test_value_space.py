@@ -13,7 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_official_brand_philosophy_raw_has_all_brands() -> None:
     path = ROOT / "data" / "raw" / "brands" / "official_brand_philosophy_raw.csv"
     assert path.exists()
-    df = pd.read_csv(path)
+    from src.analysis.value_space import compute_brand_value_space
+
+    df, _ = compute_brand_value_space()
     assert len(df) == 8
     assert df["brand_id"].nunique() == 8
     assert (df["text_length"] > 0).all()
@@ -71,7 +73,10 @@ def test_public_consumer_evidence_is_real_not_synthetic_xyz() -> None:
 def test_brand_3d_excludes_made_up_consumer_positions() -> None:
     from src.visualization.value_space_3d import build_plotly_3d
 
-    df = pd.read_csv(ROOT / "outputs" / "tables" / "value_space_brands.csv")
+    from src.analysis.value_space import compute_brand_value_space
+
+    df, _ = compute_brand_value_space()
     fig = build_plotly_3d(df)
     assert not any("Consumer Field" in str(getattr(trace, "name", "")) for trace in fig.data)
-    assert all(pd.notna(z) for trace in fig.data for z in (getattr(trace, "z", []) or []) if z is not None)
+    assert all(pd.notna(z) for trace in fig.data
+               for z in list(getattr(trace, "z", []) if getattr(trace, "z", None) is not None else []))
